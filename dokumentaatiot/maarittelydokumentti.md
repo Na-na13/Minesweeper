@@ -1,1 +1,12 @@
-# Minesweeper
+# Miinaharavan ratkaisija
+
+#### ohjelmointikieli: python
+#### opinto-ohjelma: tietojenkäsittelytieteen kandidaatti
+#### dokumentaation kieli: suomi
+
+
+Miinaharava on yksinpelattava ongelmanratkaisupeli, jossa n x m -peliruudukosta pyritään avaamaan kaikki ruudut, joissa ei ole miinaa. Pelin ratkaisemiseksi on kehitelty eri tyylisiä algoritmeja. Tässä pelin ratkaisija-algoritmissa hyödynnetään David Becerran tutkielmaa *Algorithmic Approaches to Playing Minesweeper*. Tutkielman eräs lähestymistapa hyvän ratkaisijan toteuttamisessa on ajatella Miinaharava-peliä rajoitelaskennan ongelmana. Tässä lähestymistavassa on pyrkimyksenä määritellä jokaiselle muuttujalle arvo siten, ettei yhtäkään asetettua rajoitusta rikota.  
+
+Miinaharavan peli etenee siten, että pelaaja avaa peliruudukon ruutuja. Jokaisella ruudulla, jossa ei ole miinaa, on kokonaislukuarvo 0,..,8, joka ilmaisee ruudun vierekkäisten miinojen määrän. Toisin sanoen, jos ruudulla on arvo *n*, sillä on *n* vierekkäistä miinaa eli ruutua, jota ei tule aukaista pelin voittamiseksi. Ruudun, jonka arvo on 0, vieressä ei ole yhtään miinaa ja vastaavasti ruudun, jonka arvo on 8, kaikki vierekkäiset ruudut ovat miinoja. Kokonaislukuarvojen perusteella pelaaja voi loogisesti päätellä miinojen sijainteja peliruudukossa ja merkata ruutuja mahdollisiksi miinoiksi. Kuitenkaan kaikkien miinojen tarkkoja sijainteja ei voi välttämättä päätellä niihin viittaavien lukuarvojen perusteella. Eteen voi tulla tilanne, joka vaatii pelaajalta silkkaa arvaamasta. Tämänkaltaiset tilanteet aiheuttavat haasteita pelin ratkaisualgoritmien suunnittelussa. 
+
+Ajateltaessa Miinaharavaa rajoitelaskennan ongelmana jokaisella ruudulla on arvo 1 tai 0 eli ruudussa on miina (1) tai ruutu on miinaton (0). Kun pelaaja avaa ruudun x, se asettaa rajoituksia sen naapuriruuduille sieltä avautuvat kokonaislukuarvon perusteella. Tämän perusteella voidaan tehdä päätelmiä peliruudukon miina-asetelmista. Joitain ruutuja pystytään heti merkkaamaan miinoiksi ja toisaalla saadaan arvioita todennäköisistä miinojen sijainneista. Ratkaisijan toteutuksessa ideana on ensin käsitellä varmat miinapaikat ja toisaalta varmat miinattomat paikat ja avata tämän perusteella varmoja miinattomia ruutuja, jotka voivat peliruudukkoa lisää vapauttamalla antaa uutta informaatioita ei-varmojen ruutujen avaamiseen. Kun kaikki täysin varmat miinattomat paikat on avattu, lähdetään suoritamaan peruuttavaa hakua, jotta löydetään kaikki olemassa olevat vastausmahdollisuudet. 
