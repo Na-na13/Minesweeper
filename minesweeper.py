@@ -20,6 +20,7 @@ class Minesweeper:
 
         self.draw_grid()
         self.place_mines()
+        self.open()
         self.loop()
 
 
@@ -68,6 +69,29 @@ class Minesweeper:
                             self.minemap[j+1][i+1] += 1 # viistoon oikealle alas
         print(self.minemap)
 
+    def open(self):
+        self.opened = [[False for x in range(10)] for y in range(10)]
+
+    def dfs(self,y,x):
+        if y < 0 or x < 0 or y >= 10 or x >= 10:
+            return
+        if self.opened[x][y]:
+            return
+        if  0 < self.minemap[x][y] < 10:
+            self.opened[x][y] = True
+            return
+        self.opened[x][y] = True
+        self.dfs(y-1,x-1)
+        self.dfs(y-1,x)
+        self.dfs(y-1,x+1)
+        self.dfs(y,x-1)
+        self.dfs(y,x+1)
+        self.dfs(y+1,x-1)
+        self.dfs(y+1,x)
+        self.dfs(y+1,x+1)
+        
+        
+        
 
     def loop(self):
         while True:
@@ -75,21 +99,40 @@ class Minesweeper:
             self.draw_window()
 
     def search_events(self):
+        self.gameover = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
             if event.type == pygame.MOUSEBUTTONDOWN:
-                if event.button == 1:
-                    y = event.pos[0] // (self.width + self.margin)
-                    x = event.pos[1] // (self.height + self.margin)
-                    if self.minemap[x][y] != 10:
-                        pygame.draw.rect(self.window,(128,128,128), (y*(self.width + self.margin) + self.margin, x * (self.height + self.margin) + self.margin, self.width, self.height))
+                y = event.pos[0] // (self.width + self.margin)
+                x = event.pos[1] // (self.height + self.margin)
+                if not self.gameover:
+                    if event.button == 1:
+                        if not self.opened[x][y]:
+                            if self.minemap[x][y] != 10:
+                                self.dfs(y,x)
+                                for y in range(0,10):
+                                    for x in range(0,10):
+                                        if self.opened[x][y]:
+                                            pygame.draw.rect(self.window,(128,128,128), (y*(self.width + self.margin) + self.margin, x * (self.height + self.margin) + self.margin, self.width, self.height))
+                                            font = pygame.font.SysFont("Arial", 20)
+                                            get_number = self.minemap[x][y]
+                                            if get_number == 0:
+                                                number = font.render("", True, (0,0,255))
+                                            else:
+                                                number = font.render(str(get_number), True, (0,0,255))
+                                            self.window.blit(number,(self.margin+(y*20)+(y*5)+4,self.margin+(x*20)+(x*5)-2))
+
+                            else:
+                                pygame.draw.rect(self.window,(255,0,0), (y*(self.width + self.margin) + self.margin, x * (self.height + self.margin) + self.margin, self.width, self.height))
+                                font = pygame.font.SysFont("Arial", 40)
+                                mine = font.render("*", True, (0,0,0))
+                                self.window.blit(mine,(self.margin+(y*20)+(y*5)+3,self.margin+(x*20)+(x*5)-4))
+                                self.gameover = True
+                    if event.button == 3:
                         font = pygame.font.SysFont("Arial", 20)
-                        get_number = self.minemap[x][y]
-                        number = font.render(str(get_number), True, (0,0,255))
-                        self.window.blit(number,(self.margin+(y*20)+(y*5),self.margin+(x*20)+x*5))
-                    else:
-                        pygame.draw.rect(self.window,(255,0,0), (y*(self.width + self.margin) + self.margin, x * (self.height + self.margin) + self.margin, self.width, self.height))
+                        doubt = font.render("?", True, (0,0,255))
+                        self.window.blit(doubt,(self.margin+(y*20)+(y*5)+4,self.margin+(x*20)+(x*5)-2))
 
     def draw_window(self):
         pygame.display.flip()
