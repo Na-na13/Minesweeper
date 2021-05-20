@@ -25,12 +25,14 @@ class Minesweeper:
 
 
     def draw_grid(self):
+        # piirtää pelin pohjan
         for j in range(0,10):
             for i in range(0,10):
                 pygame.draw.rect(self.window,(255,255,255), (i*(self.width + self.margin) + self.margin, j * (self.height + self.margin) + self.margin, self.width, self.height))
 
-
     def place_mines(self):
+        # luodaan ensin kaksiuloitteinen miinakartta vastaamaan pelin pohjaruudukkoa ja 
+        # asetetaan miinat satunnaisesti generoiduille paikoille
         self.minemap = [[0 for x in range(10)] for y in range(10)]
         mines = 0
         while mines < 10:
@@ -39,7 +41,7 @@ class Minesweeper:
             if self.minemap[x][y] == 0:
                 self.minemap[x][y] = 10
                 mines += 1
-        print(self.minemap)
+        # asetetaan miinoista kertovat vihjeet miinojen viereisiin ruutuihin
         for j in range(0,10):
             for i in range(0,10): # i = y, j = x
                 if self.minemap[j][i] == 10: # (y-1,x-1);(y-1,x);(y-1,x+1);(y,x-1);(y,x+1);(y+1,x-1);(y+1,x);(y+1,x+1)
@@ -67,7 +69,6 @@ class Minesweeper:
                     if j+1 < 10 and i+1 < 10:
                         if self.minemap[j+1][i+1] != 10:
                             self.minemap[j+1][i+1] += 1 # viistoon oikealle alas
-        print(self.minemap)
 
     def open(self):
         self.opened = [[False for x in range(10)] for y in range(10)]
@@ -89,9 +90,6 @@ class Minesweeper:
         self.dfs(y+1,x-1)
         self.dfs(y+1,x)
         self.dfs(y+1,x+1)
-        
-        
-        
 
     def loop(self):
         while True:
@@ -139,4 +137,3 @@ class Minesweeper:
 
 if __name__ == "__main__":
     Minesweeper()
-
