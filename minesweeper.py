@@ -8,7 +8,7 @@ class Minesweeper:
 
         pygame.init()
 
-        self.win_height = 255
+        self.win_height = 275
         self.win_width = 255
         self.margin = 5
         self.height = 20
