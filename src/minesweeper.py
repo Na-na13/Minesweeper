@@ -5,12 +5,9 @@ from random import randint
 class Minesweeper:
 
     def __init__(self,w,h,mines):
-        self.mines = mines
-        #self.x = x
-        #self.y = y
-
         pygame.init()
 
+        self.mines = mines
         self.margin = 5
         self.height = 20
         self.width = 20
@@ -97,12 +94,12 @@ class Minesweeper:
         self.dfs(y+1,x+1,w,h)
 
     def loop(self,w,h):
+        self.gameover = False
         while True:
             self.search_events(w,h)
             self.draw_window()
 
     def search_events(self,w,h):
-        self.gameover = False
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 exit()
@@ -142,6 +139,6 @@ class Minesweeper:
 
 if __name__ == "__main__":
     easy = (10,10,10)
-    intermediate = (16,16,40)
+    normal = (16,16,40)
     hard = (30,16,99)
-    Minesweeper(30,16,99)
+    Minesweeper(16,16,40)
