@@ -96,46 +96,40 @@ class Minesweeper:
     def loop(self,w,h):
         self.gameover = False
         while True:
-            self.search_events(w,h)
-            self.draw_window()
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                if event.type == pygame.MOUSEBUTTONDOWN: # avataan klikattu ruutu
+                    y = event.pos[0] // (self.width + self.margin)
+                    x = event.pos[1] // (self.height + self.margin)
+                    if not self.gameover:
+                        if event.button == 1:
+                            if not self.opened[x][y]:
+                                if self.minemap[x][y] != 10: # jos ruudussa ei ole miinaa
+                                    self.dfs(y,x,w,h)
+                                    for a in range(0,h):
+                                        for b in range(0,w):
+                                            if self.opened[a][b]:
+                                                pygame.draw.rect(self.window,(128,128,128), (b*(self.width + self.margin) + self.margin, a * (self.height + self.margin) + self.margin, self.width, self.height))
+                                                font = pygame.font.SysFont("Arial", 20)
+                                                get_number = self.minemap[a][b]
+                                                if get_number == 0:
+                                                    number = font.render("", True, (0,0,255))
+                                                else:
+                                                    number = font.render(str(get_number), True, (0,0,255))
+                                                self.window.blit(number,(self.margin+(b*20)+(b*5)+4,self.margin+(a*20)+(a*5)-2))
 
-    def search_events(self,w,h):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
-            if event.type == pygame.MOUSEBUTTONDOWN: # avataan klikattu ruutu
-                y = event.pos[0] // (self.width + self.margin)
-                x = event.pos[1] // (self.height + self.margin)
-                if not self.gameover:
-                    if event.button == 1:
-                        if not self.opened[x][y]:
-                            if self.minemap[x][y] != 10: # jos ruudussa ei ole miinaa
-                                self.dfs(y,x,w,h)
-                                for a in range(0,h):
-                                    for b in range(0,w):
-                                        if self.opened[a][b]:
-                                            pygame.draw.rect(self.window,(128,128,128), (b*(self.width + self.margin) + self.margin, a * (self.height + self.margin) + self.margin, self.width, self.height))
-                                            font = pygame.font.SysFont("Arial", 20)
-                                            get_number = self.minemap[a][b]
-                                            if get_number == 0:
-                                                number = font.render("", True, (0,0,255))
-                                            else:
-                                                number = font.render(str(get_number), True, (0,0,255))
-                                            self.window.blit(number,(self.margin+(b*20)+(b*5)+4,self.margin+(a*20)+(a*5)-2))
-
-                            else: # jos ruudussa on miina
-                                pygame.draw.rect(self.window,(255,0,0), (y*(self.width + self.margin) + self.margin, x * (self.height + self.margin) + self.margin, self.width, self.height))
-                                font = pygame.font.SysFont("Arial", 40)
-                                mine = font.render("*", True, (0,0,0))
-                                self.window.blit(mine,(self.margin+(y*20)+(y*5)+3,self.margin+(x*20)+(x*5)-4))
-                                self.gameover = True
-                    if event.button == 3:
-                        font = pygame.font.SysFont("Arial", 20)
-                        doubt = font.render("?", True, (0,0,255))
-                        self.window.blit(doubt,(self.margin+(y*20)+(y*5)+4,self.margin+(x*20)+(x*5)-2))
-
-    def draw_window(self):
-        pygame.display.flip()
+                                else: # jos ruudussa on miina
+                                    pygame.draw.rect(self.window,(255,0,0), (y*(self.width + self.margin) + self.margin, x * (self.height + self.margin) + self.margin, self.width, self.height))
+                                    font = pygame.font.SysFont("Arial", 40)
+                                    mine = font.render("*", True, (0,0,0))
+                                    self.window.blit(mine,(self.margin+(y*20)+(y*5)+3,self.margin+(x*20)+(x*5)-4))
+                                    self.gameover = True
+                        if event.button == 3:
+                            font = pygame.font.SysFont("Arial", 20)
+                            doubt = font.render("?", True, (0,0,255))
+                            self.window.blit(doubt,(self.margin+(y*20)+(y*5)+4,self.margin+(x*20)+(x*5)-2))
+            pygame.display.flip()
 
 if __name__ == "__main__":
     easy = (10,10,10)

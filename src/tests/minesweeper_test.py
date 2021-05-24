@@ -1,5 +1,5 @@
 import unittest
-from Minesweeper import Minesweeper
+from minesweeper import Minesweeper
 
 class TestMinesweeper(unittest.TestCase):
     def setUp(self):
