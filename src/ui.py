@@ -1,6 +1,6 @@
-# Ui
 import pygame
 from minesweeper import Minesweeper
+from minesweeper import MSGameLoop
 
 class StartWindow:
 
@@ -67,7 +67,6 @@ class Levels:
         self.win_width = 255
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
         self.window.fill((255,255,255))
-        pygame.display.set_caption("Minesweeper")
         pygame.display.flip()
 
         clock = pygame.time.Clock()
@@ -108,7 +107,12 @@ class Levels:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
-                            Minesweeper(10,10,10)
+                            game = Minesweeper(10,10,10)
+                            w = 10
+                            h = 10
+                            gameloop = MSGameLoop(game,w,h)
+                            gameloop.start(10,10)
+
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             Minesweeper(16,16,40)
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
@@ -124,5 +128,5 @@ class EndWindow:
         pass
 
 if __name__ == "__main__":
-    #StartWindow()
-    Levels()
+    StartWindow()
+    #Levels()
