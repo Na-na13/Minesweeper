@@ -1,5 +1,6 @@
-import pygame
 from random import randint
+import pygame
+import ui
 
 CELL_SIZE = 20
 MARGIN = 5
@@ -53,7 +54,7 @@ class Minesweeper:
                         if self.minemap[j-1][i+1] != 10:
                             self.minemap[j-1][i+1] += 1 # viistoon oikealle ylös
                     if i-1 >= 0:
-                        if self.minemap[j][i-1] != 10: 
+                        if self.minemap[j][i-1] != 10:
                             self.minemap[j][i-1] += 1 # vasen
                     if i+1 < w:
                         if self.minemap[j][i+1] != 10:
@@ -67,7 +68,7 @@ class Minesweeper:
                     if j+1 < h and i+1 < w:
                         if self.minemap[j+1][i+1] != 10:
                             self.minemap[j+1][i+1] += 1 # viistoon oikealle alas
-    
+
     def __str__(self):
         # Tulostaa miinojen määrän
         mines = 0
@@ -84,11 +85,11 @@ class MSGameLoop:
         self.opened = [[False for x in range(w)] for y in range(h)]
         self.doubted = [[False for x in range(w)] for y in range(h)]
         self.clock = pygame.time.Clock()
+        self.gameover = False
 
     def start(self,w,h):
-        self.gameover = False
         while True:
-            for event in pygame.event.get(): 
+            for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN: # avataan klikattu ruutu
@@ -117,6 +118,7 @@ class MSGameLoop:
                                     self.game.window.blit(mine,(MARGIN + (x * 20) + (x * 5) + 3, MARGIN + (y * 20) + (y * 5) - 4))
                                     self.gameover = True
                                     self.mine_explosion(w,h)
+                                    continue
                         elif event.button == 3: # miinaepäilyn merkintä
                             if not self.opened[y][x]:
                                 font = pygame.font.SysFont("Arial", 20)
@@ -130,12 +132,14 @@ class MSGameLoop:
                                     self.game.window.blit(empty,(MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
                                     self.doubted[y][x] = False
                                     pygame.display.update()
+                    else:
+                        ui.EndWindow(w,h,self.game.mines)
             pygame.display.flip()
             self.clock.tick(60)
 
     def dfs(self,y,x,w,h):
-        # käydään syvyyshaulla läpi klikatun ruudun naapuriruudut jne, ja merkataan avatuiksi kaikki vierekkäiset
-        # ruudut, joiden arvo on < 10 ja lopetetaan haku, jos arvo on > 0 mutta < 10 
+        # käydään syvyyshaulla läpi klikatun ruudun naapuriruudut jne, ja merkataan avatuiksi kaikki
+        # vierekkäiset ruudut, joiden arvo on < 10 ja lopetetaan haku, jos arvo on > 0 mutta < 10
         if y < 0 or x < 0 or y >= h or x >= w:
             return
         if self.opened[y][x]:
@@ -152,7 +156,7 @@ class MSGameLoop:
         self.dfs(y+1,x-1,w,h)
         self.dfs(y+1,x,w,h)
         self.dfs(y+1,x+1,w,h)
-    
+
     def mine_explosion(self,w,h):
         # kun on klikattu miinaa, räjäytetään kaikki miinat
         for y in range(h):
@@ -162,6 +166,10 @@ class MSGameLoop:
                     font = pygame.font.SysFont("Arial", 40)
                     mine = font.render("*", True, (0,0,0))
                     self.game.window.blit(mine, (MARGIN + (x * 20) + (x * 5) + 3, MARGIN + (y * 20) + (y * 5) - 4))
+                elif self.doubted[y][x]: # jos epäilty ei ole miina, laitetaan punainen x
+                    font = pygame.font.SysFont("Arial", 20)
+                    fail = font.render("X", True, (255,0,0))
+                    self.game.window.blit(fail, (MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
 
         # lopetusikkunan avaaminen
 

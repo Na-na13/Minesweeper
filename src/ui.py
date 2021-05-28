@@ -1,6 +1,12 @@
 import pygame
-from minesweeper import Minesweeper
-from minesweeper import MSGameLoop
+#from minesweeper import Minesweeper
+#from minesweeper import MSGameLoop
+import minesweeper
+
+WHITE = (255,255,255)
+DGREY = (128,128,128)
+LGREY = (170,170,170)
+BLACK = (0,0,0)
 
 class StartWindow:
 
@@ -9,10 +15,8 @@ class StartWindow:
 
         self.win_height = 275
         self.win_width = 255
-
-        
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
-        self.window.fill((255,255,255))
+        self.window.fill(WHITE)
         pygame.display.set_caption("Minesweeper")
 
 
@@ -31,15 +35,15 @@ class StartWindow:
                         Levels()
 
             if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window,(170,170,170), (77, 62, 100, 50)) #left,top,w,h
+                pygame.draw.rect(self.window, LGREY, (77, 62, 100, 50)) #left,top,w,h
             else:
-                pygame.draw.rect(self.window,(128,128,128), (77, 62, 100, 50))
+                pygame.draw.rect(self.window, DGREY, (77, 62, 100, 50))
             if 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window,(170,170,170), (77, 117, 100, 50))
+                pygame.draw.rect(self.window, LGREY, (77, 117, 100, 50))
             else:
                 pygame.draw.rect(self.window,(128,128,128), (77, 117, 100, 50))
             if 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window,(170,170,170), (77, 172, 100, 50))
+                pygame.draw.rect(self.window, LGREY, (77, 172, 100, 50))
             else:
                 pygame.draw.rect(self.window,(128,128,128), (77, 172, 100, 50))
 
@@ -54,7 +58,7 @@ class StartWindow:
             font = pygame.font.SysFont("Arial", 40)
             text = font.render("MINESWEEPER", True, (0,0,0))
             self.window.blit(text,(2, 0))
-                
+
             pygame.display.flip()
             clock.tick(60)
 
@@ -66,22 +70,22 @@ class Levels:
         self.win_height = 275
         self.win_width = 255
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
-        self.window.fill((255,255,255))
+        self.window.fill(WHITE)
         pygame.display.flip()
 
         clock = pygame.time.Clock()
         while True:
             mouse = pygame.mouse.get_pos()
             if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window,(170,170,170), (77, 62, 100, 50)) #left,top,w,h
+                pygame.draw.rect(self.window, LGREY, (77, 62, 100, 50)) #left,top,w,h
             else:
                 pygame.draw.rect(self.window,(128,128,128), (77, 62, 100, 50))
             if 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window,(170,170,170), (77, 117, 100, 50))
+                pygame.draw.rect(self.window, LGREY, (77, 117, 100, 50))
             else:
                 pygame.draw.rect(self.window,(128,128,128), (77, 117, 100, 50))
             if 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window,(170,170,170), (77, 172, 100, 50))
+                pygame.draw.rect(self.window, LGREY, (77, 172, 100, 50))
             else:
                 pygame.draw.rect(self.window,(128,128,128), (77, 172, 100, 50))
 
@@ -107,25 +111,79 @@ class Levels:
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     if event.button == 1:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
-                            game = Minesweeper(10,10,10)
-                            w = 10
-                            h = 10
-                            gameloop = MSGameLoop(game,w,h)
+                            game = minesweeper.Minesweeper(10,10,10)
+                            gameloop = minesweeper.MSGameLoop(game,10,10)
                             gameloop.start(10,10)
-
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                            Minesweeper(16,16,40)
+                            game = minesweeper.Minesweeper(16,16,40)
+                            gameloop = minesweeper.MSGameLoop(game,16,16)
+                            gameloop.start(16,16)
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                            Minesweeper(30,16,99)
-                    
+                            game = minesweeper.Minesweeper(30,16,99)
+                            gameloop = minesweeper.MSGameLoop(game,30,16)
+                            gameloop.start(30,16)
 
             pygame.display.flip()
             clock.tick(60)
 
 class EndWindow:
 
-    def __init__(self):
-        pass
+    def __init__(self,w,h,mines):
+        pygame.init()
+
+        self.win_height = 275
+        self.win_width = 255
+        self.window = pygame.display.set_mode((self.win_width, self.win_height))
+        self.window.fill(WHITE)
+
+        clock = pygame.time.Clock()
+        while True:
+            mouse = pygame.mouse.get_pos()
+            if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
+                pygame.draw.rect(self.window, LGREY, (77, 62, 100, 50)) #left,top,w,h
+            else:
+                pygame.draw.rect(self.window,(128,128,128), (77, 62, 100, 50))
+            if 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
+                pygame.draw.rect(self.window, LGREY, (77, 117, 100, 50))
+            else:
+                pygame.draw.rect(self.window,(128,128,128), (77, 117, 100, 50))
+            if 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
+                pygame.draw.rect(self.window, LGREY, (77, 172, 100, 50))
+            else:
+                pygame.draw.rect(self.window,(128,128,128), (77, 172, 100, 50))
+
+            font = pygame.font.SysFont("Arial", 40)
+            text = font.render("RETRY", True, (0,0,0))
+            self.window.blit(text,((55+(50/2)), (15+(100/2))))
+
+            font = pygame.font.SysFont("Arial", 27)
+            text = font.render("CHANGE LEVEL", True, (0,0,0))
+            self.window.blit(text,((55+(50/2)), (77+(100/2))))
+
+            font = pygame.font.SysFont("Arial", 40)
+            text = font.render("QUIT", True, (0,0,0))
+            self.window.blit(text,((55+(50/2)), (125+(100/2))))
+
+            font = pygame.font.SysFont("Arial", 40)
+            text = font.render("YOU LOSE", True, (0,0,0))
+            self.window.blit(text,((255/4), 0))
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    exit()
+                elif event.type == pygame.MOUSEBUTTONDOWN:
+                    if event.button == 1:
+                        if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
+                            game = minesweeper.Minesweeper(w,h,mines)
+                            gameloop = minesweeper.MSGameLoop(game,w,h)
+                            gameloop.start(w,h)
+                        elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
+                            Levels()
+                        elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
+                            exit()
+
+            pygame.display.flip()
+            clock.tick(60)
 
 if __name__ == "__main__":
     StartWindow()
