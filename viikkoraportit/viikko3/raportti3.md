@@ -1,7 +1,7 @@
 ### Viikko 3
 
 
-Kuluneen viikon aikana muokkasin pelin koodia siten, että yksikkötestausta pääsisi paremmin toteuttamaan. Testien koodaaminen on kuitenkin tuottanut jonkin verran ongelmia enkä saavuttanut testausten suhteen tämän viikon tavoitteita. Sain kuitenkin koodattua peliä kokonaisuudessaan valmiimmaksi esim. lisäämällä häviötä seuraavan ikkunan, josta pystyy valitsemaan, halutaanko pelata uudelleen, vaihtaa vaikeustasoa tai lopettamaan.   
+Kuluneen viikon aikana muokkasin pelin koodia siten, että yksikkötestausta pääsisi paremmin toteuttamaan. Testien koodaaminen on kuitenkin tuottanut jonkin verran ongelmia enkä saavuttanut testausten suhteen tämän viikon tavoitteita. Sain kuitenkin koodattua peliä kokonaisuudessaan valmiimmaksi esim. lisäämällä häviötä seuraavan ikkunan, josta pystyy valitsemaan, halutaanko pelata uudelleen, vaihtaa vaikeustasoa tai lopettamaan.Työtunteja kertyi tällä viikolla n. 15.   
 
 Tällä viikolla tutustuin paremmin Pythonin koodin laadun tarkistuksen apuvälineeseen *pylintiin*, joka vastaa Javan *checkstylea*. Oli opettavaista saada oman koodin laadusta analyysiä ja ”arvosana”. Ensimmäisen analyysin jälkeen koodini arvosana oli 6.15/10.00 ja helposti korjattavien *pylintin* ilmoittamien virheiden korjaamisen jälkeen arvosanaksi tuli 8.31/10.00. Korjattavaa löytyy vielä mm. liian monihaaraisista/sisäkkäisistä silmukoista.  
 
