@@ -95,8 +95,8 @@ class MSGameLoop:
 
     def start(self,w,h):
         while True:
-            for event in list (pygame.event.get()) + self.solver.run_solver():
-            #for event in pygame.event.get():
+            #for event in list (pygame.event.get()) + self.solver.run_solver(): # tämä rivi on bottia varten
+            for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN: # avataan klikattu ruutu
