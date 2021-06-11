@@ -1,0 +1,7 @@
+### Viikko 5
+
+Kuluneen viikon aikana keskityin pelin ratkaisija-botin toteutukseen. Tässä pääsin siihen vaiheeseen, että botti osaa löytää kaikki varmat miinat sen perusteella, että vihjeruudun avaamattomien naapurien lukumäärän *n* olleessa sama kuin vihjeruudun miinavihje *n*, ovat kaikki avaamattomat naapuriruudut miinoja. Vastaavalla tavalla etsitään myös varmat miinattomat ruudut: jos vihjeruudun naapuriruuduista on merkattu vihjeen verran miinoja, kaikki loput avaamattomat naapuriruudut ovat miinattomia. Tätä vuorottelua jatketaan niin kauan, kunnes ei enää ole tällä periaatteella selviä miinattomia/miinallisia ruutuja.
+
+Nykyisellään botti pystyy voittamaan pelejä, mutta voittoprosentti ei ole kovinkaan suuri. Bottia pitää siis parannella siten, että se pystyy ratkomaan pelit paremmalla voittoprosentilla sekä käsittelemään tilanteita, joissa ainut vaihtoehto on arvata, missä ruudussa miina on. Olin ajatellut toteuttaa tämän muuntamalla ratkaisuongelma rajoitelaskennan ongelmaksi. Aikani ei kuitenkaan riitä tähän, joten päädyin hiukan yksinkertaisempaan ns. *Double Set Single Point* -ratkaisuun.  Lopuksi olisi tarkoitus tehdä vielä testailua ratkaisubotin toimivuudesta.
+
+Viimeisille viikoille on vielä paljon tekemistä, mutta uskoisin saavani kaiken tehtyä. Yksikkötestaus jäänee aika pitkälle toteuttamatta, sillä sen kanssa on jostain syystä ollut paljon hahmottamisongelmaa toteutuksessa. En aio käyttää siihen liikaa aikaa, sillä ohjelman botin toiminta on tällä hetkellä kriittisempää.
