@@ -1,0 +1,8 @@
+### Viikko 2
+
+Kuluneen viikon aikana sain koodattua valmiiksi pelin rungon kolmelle eri vaikeustasolle eli helppo, keskitaso ja vaikea. Peli on tällä hetkellä pelattava ja vaikuttaisi muutamien pelikertojen jälkeen toimivan halutulla tavalla. Ohjelma on edistynyt tähän mennessä melko rivakkaa tahtia, mutta ole ajatellutkin, että mitä nopeammin saan pelin itsessään valmiiksi, sitä enemmän minulla jää aikaa perehtyä ratkaisualgoritmin ja -botin suunnitteluun ja toteutukseen. Viikon työtuntimäärä oli noin 15 tunnin paikkeilla.
+
+Pygamen käyttö ei ole ollut minulle kovin tuttua ennen tätä kurssia, mutta olen nopeasti oppinut perusasioita pygamen käytöstä. Googlailemalla löytyy onneksi paljon apumateriaalia, joten kokemattomuus pygamen käytöstä ei ole kovinkaan paljoa hidastanut koodaamista. Koodini sisältää myös useamman kaksiulotteisen taulukon ja näiden käsittely on tullut tutummaksi. Kaksiulotteisista taulukoista opin myös sen, että Pythonissa kaksiulotteisen taulukon alkioita haetaan periaatteella ensin rivi sitten sarake eli ns. rivipääjärjestys, mutta on olemassa ohjelmointikieliä, jossa järjestys on päinvastainen eli ns. sarakepääjärjestys.  
+
+En ole vielä kunnolla aloittanut tekemään yksikkötestausta, sillä en sitä ole aikaisemmin tehnyt. Olen hakenut apuja tähän kurssin *Ohjelmistotekniikka* kurssimateriaalista sekä miettinyt, minkälaisia asioita koodistani kannattaisi testata. Testauksen toteutukseen pitää seuraavaksi perehtyä paremmin ja aloittaa testien koodaaminen jo näin hyvissä ajoin, jotta testit tavallaan olisivat tukemassa. Tämän lisäksi tarkoituksena olisi aloitella pelin ratkaisualgoritmin suunnittelu ja toteutus sekä miettiä ratkaisubotin toimintaa.
+
