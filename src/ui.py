@@ -111,9 +111,9 @@ class Levels:
                     if event.button == 1:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(10,10,10)
-                            #bot = solver_bot.SolverBot(10,10,10,game) # tämä on bottia varten
-                            #gameloop = minesweeper.MSGameLoop(game,10,10,bot) # tämä on bottia varten
-                            gameloop = minesweeper.MSGameLoop(game,10,10)
+                            bot = solver_bot.SolverBot(10,10,10,game) # tämä on bottia varten
+                            gameloop = minesweeper.MSGameLoop(game,10,10,bot) # tämä on bottia varten
+                            #gameloop = minesweeper.MSGameLoop(game,10,10)
                             gameloop.start(10,10)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(16,16,40)

@@ -95,8 +95,13 @@ class MSGameLoop:
 
     def start(self,w,h):
         while True:
-            #for event in list (pygame.event.get()) + self.solver.run_solver(): # tämä rivi on bottia varten
-            for event in pygame.event.get():
+            if not self.gameover:
+                next_move = self.solver.next_move()
+                for move in next_move:
+                    print(move.pos,move.button)
+            else:
+                next_move = []
+            for event in pygame.event.get() + next_move:
                 if event.type == pygame.QUIT:
                     exit()
                 elif event.type == pygame.MOUSEBUTTONDOWN: # avataan klikattu ruutu
@@ -142,12 +147,12 @@ class MSGameLoop:
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
                                     pygame.display.update()
-                    else:
-                        play_time = f"{self.end_time - self.start_time:.2f}"
-                        if self.gamewin:
-                            ui.WinWindow(w,h,self.game.mines,play_time)
-                        else:
-                            ui.EndWindow(w,h,self.game.mines,play_time)
+                    #else:
+                    #    play_time = f"{self.end_time - self.start_time:.2f}"
+                    #    if self.gamewin:
+                    #        ui.WinWindow(w,h,self.game.mines,play_time)
+                    #    else:
+                    #        ui.EndWindow(w,h,self.game.mines,play_time)
 
             #font = pygame.font.SysFont("Arial", 20)
             #mine = font.render(f"*: {self.minecounter}", True, (255,0,0))
@@ -166,7 +171,7 @@ class MSGameLoop:
             self.opened[y][x] = True
             if self.solver != None:
                 self.solver.gamegrid[y][x] = self.game.minemap[y][x]
-                print(self.solver.gamegrid)
+                #print(self.solver.gamegrid)
             return
         self.opened[y][x] = True
         if self.solver != None:
@@ -204,7 +209,7 @@ class MSGameLoop:
                     font = pygame.font.SysFont("Arial", 40)
                     mine = font.render("*", True, (0,0,0))
                     self.game.window.blit(mine, (MARGIN + (x * 20) + (x * 5) + 3, MARGIN + (y * 20) + (y * 5) - 4))
-                elif self.doubted[y][x]: # jos epäilty ei ole miina, laitetaan punainen x
+                elif self.doubted[y][x] and not self.opened[y][x]: # jos epäilty ei ole miina, laitetaan punainen x
                     font = pygame.font.SysFont("Arial", 20)
                     fail = font.render("X", True, (255,0,0))
                     self.game.window.blit(fail, (MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
