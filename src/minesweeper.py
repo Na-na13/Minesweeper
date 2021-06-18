@@ -10,6 +10,13 @@ MARGIN = 5
 class Minesweeper:
 
     def __init__(self,w,h,mines):
+        """[summary]
+
+        Args:
+            w ([type]): [description]
+            h ([type]): [description]
+            mines ([type]): [description]
+        """
         pygame.init()
         self.mines = mines
         self.minemap = [[0 for a in range(w)] for b in range(h)]

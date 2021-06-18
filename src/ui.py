@@ -1,6 +1,8 @@
 import pygame
 import minesweeper
 import solver_bot
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 WHITE = (255,255,255)
 DGREY = (128,128,128)
