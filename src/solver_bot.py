@@ -3,6 +3,9 @@ from collections import deque
 import pygame
 import ui
 import minesweeper
+from random import choice
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 class SolverBot:
     
@@ -13,6 +16,7 @@ class SolverBot:
         self.h = h
         self.eventqueue = deque()
         self.first_move = True
+        self.sidecells_opened = False
 
     def next_move(self):
         if self.first_move:
@@ -25,6 +29,8 @@ class SolverBot:
             if len(self.eventqueue) > 0:
                 return [self.eventqueue.popleft()]
             return []
+            #else:
+            #open random cell
 
     def run_solver(self):
             mines = self.search_mines()
@@ -161,6 +167,14 @@ class SolverBot:
                     if cords not in free_pos:
                         free_pos.append(cords)
         return free_pos
+
+    def open_random(self):
+        corners = [(self.h-1,0),(self.h-1,self.w-1),(0,self.w-1)]
+        random = choice(corners)
+        #if self.gamegrid[random[0]][random[1]] == 20:
+        #    self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((y*20)+(y*5)+15, (x*20)+(x*5)+15),3))
+
+
 
 
 class Event:

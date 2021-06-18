@@ -3,6 +3,8 @@ from time import time
 import pygame
 import solver_bot
 import ui
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 CELL_SIZE = 20
 MARGIN = 5

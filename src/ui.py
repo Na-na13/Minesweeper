@@ -1,8 +1,10 @@
+import os
+
 import pygame
 import minesweeper
 import solver_bot
-import os
-os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+
 
 WHITE = (255,255,255)
 DGREY = (128,128,128)
@@ -12,6 +14,8 @@ BLACK = (0,0,0)
 class StartWindow:
 
     def __init__(self):
+        #os.environ["SDL_VIDEODRIVER"] = "dummy"
+        os.environ['SDL_AUDIODRIVER'] = 'dsp'
         pygame.init()
 
         self.win_height = 275
