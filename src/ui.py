@@ -14,7 +14,6 @@ BLACK = (0,0,0)
 class StartWindow:
 
     def __init__(self):
-        #os.environ["SDL_VIDEODRIVER"] = "dummy"
         os.environ['SDL_AUDIODRIVER'] = 'dsp'
         pygame.init()
 
@@ -123,10 +122,14 @@ class Levels:
                             gameloop.start(10,10)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(16,16,40)
-                            gameloop = minesweeper.MSGameLoop(game,16,16)
+                            bot = solver_bot.SolverBot(16,16,40,game) # tämä on bottia varten
+                            gameloop = minesweeper.MSGameLoop(game,16,16,bot) # tämä on bottia varten
+                            #gameloop = minesweeper.MSGameLoop(game,16,16)
                             gameloop.start(16,16)
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(30,16,99)
+                            bot = solver_bot.SolverBot(30,16,99,game) # tämä on bottia varten
+                            #gameloop = minesweeper.MSGameLoop(game,30,16,bot) # tämä on bottia varten
                             gameloop = minesweeper.MSGameLoop(game,30,16)
                             gameloop.start(30,16)
 

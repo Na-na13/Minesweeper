@@ -1,4 +1,4 @@
-from invoke import task
+import invoke
 
 @task
 def start(ctx):

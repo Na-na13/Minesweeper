@@ -3,8 +3,7 @@ from time import time
 import pygame
 import solver_bot
 import ui
-import os
-os.environ["SDL_VIDEODRIVER"] = "dummy"
+
 
 CELL_SIZE = 20
 MARGIN = 5
@@ -104,7 +103,7 @@ class MSGameLoop:
 
     def start(self,w,h):
         while True:
-            if not self.gameover:
+            if not self.gameover and self.solver != None:
                 next_move = self.solver.next_move()
                 for move in next_move:
                     print(move.pos,move.button)
@@ -155,7 +154,7 @@ class MSGameLoop:
                                     self.game.window.blit(empty,(MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
-                                    pygame.display.update()
+                                    #pygame.display.update()
                     #else:
                     #    play_time = f"{self.end_time - self.start_time:.2f}"
                     #    if self.gamewin:
@@ -165,8 +164,9 @@ class MSGameLoop:
 
             #font = pygame.font.SysFont("Arial", 20)
             #mine = font.render(f"*: {self.minecounter}", True, (255,0,0))
-            #self.game.window.blit(mine,(0, (self.game.win_height-20)))    
-            pygame.display.flip()
+            #self.game.window.blit(mine,(0, (self.game.win_height-20)))  
+            self.show_minecounter()  
+            pygame.display.update()
             self.clock.tick(60)
 
     def dfs(self,y,x,w,h):
@@ -238,6 +238,10 @@ class MSGameLoop:
                 if self.game.minemap[y][x] == 10:
                     pygame.draw.rect(self.game.window,(0,250,0), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
+    def show_minecounter(self):
+        font = pygame.font.SysFont("Arial", 20)
+        total = font.render("Mines: " + str(self.minecounter), True, (255,0,0))
+        self.game.window.blit(total,(0, (self.game.win_height-25)))
 
 if __name__ == "__main__":
     easy = (10,10,10)
