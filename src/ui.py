@@ -129,8 +129,8 @@ class Levels:
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(30,16,99)
                             bot = solver_bot.SolverBot(30,16,99,game) # tämä on bottia varten
-                            #gameloop = minesweeper.MSGameLoop(game,30,16,bot) # tämä on bottia varten
-                            gameloop = minesweeper.MSGameLoop(game,30,16)
+                            gameloop = minesweeper.MSGameLoop(game,30,16,bot) # tämä on bottia varten
+                            #gameloop = minesweeper.MSGameLoop(game,30,16)
                             gameloop.start(30,16)
 
             pygame.display.flip()

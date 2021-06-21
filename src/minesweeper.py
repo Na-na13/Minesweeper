@@ -165,7 +165,7 @@ class MSGameLoop:
             #font = pygame.font.SysFont("Arial", 20)
             #mine = font.render(f"*: {self.minecounter}", True, (255,0,0))
             #self.game.window.blit(mine,(0, (self.game.win_height-20)))  
-            self.show_minecounter()  
+            self.show_minecounter(w,h)  
             pygame.display.update()
             self.clock.tick(60)
 
@@ -225,9 +225,9 @@ class MSGameLoop:
 
     def is_won(self,w,h):
         # tarkistetaan jokaisen klikkauksen jälkeen onko voitettu
-        for i in range(h):
-            for j in range(w):
-                if self.opened[i][j] == False and self.game.minemap[i][j] != 10:
+        for y in range(h):
+            for x in range(w):
+                if self.opened[y][x] == False and self.game.minemap[y][x] != 10:
                     return False 
         return True
 
@@ -238,7 +238,9 @@ class MSGameLoop:
                 if self.game.minemap[y][x] == 10:
                     pygame.draw.rect(self.game.window,(0,250,0), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
-    def show_minecounter(self):
+    def show_minecounter(self,w,h):
+        pygame.draw.rect(self.game.window,(255,255,255), (0, h-20, w, h))
+        pygame.display.update()
         font = pygame.font.SysFont("Arial", 20)
         total = font.render("Mines: " + str(self.minecounter), True, (255,0,0))
         self.game.window.blit(total,(0, (self.game.win_height-25)))
