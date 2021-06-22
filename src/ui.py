@@ -1,5 +1,3 @@
-import os
-
 import pygame
 import minesweeper
 import solver_bot
@@ -14,7 +12,6 @@ BLACK = (0,0,0)
 class StartWindow:
 
     def __init__(self):
-        os.environ['SDL_AUDIODRIVER'] = 'dsp'
         pygame.init()
 
         self.win_height = 275
@@ -27,8 +24,8 @@ class StartWindow:
         clock = pygame.time.Clock()
         done = False
         while not done:
-            mouse = pygame.mouse.get_pos()
             for event in pygame.event.get():
+                mouse = pygame.mouse.get_pos()
                 if event.type == pygame.QUIT:
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
@@ -125,24 +122,24 @@ class Levels:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(10,10,10)
                             if self.bot:
-                                bot = solver_bot.SolverBot(10,10,10,game) # tämä on bottia varten
-                                gameloop = minesweeper.MSGameLoop(game,10,10,bot) # tämä on bottia varten
+                                bot = solver_bot.SolverBot(10,10,10,game)
+                                gameloop = minesweeper.MSGameLoop(game,10,10,bot)
                             else:
                                 gameloop = minesweeper.MSGameLoop(game,10,10)
                             gameloop.start(10,10)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(16,16,40)
                             if self.bot:
-                                bot = solver_bot.SolverBot(16,16,40,game) # tämä on bottia varten
-                                gameloop = minesweeper.MSGameLoop(game,16,16,bot) # tämä on bottia varten
+                                bot = solver_bot.SolverBot(16,16,40,game)
+                                gameloop = minesweeper.MSGameLoop(game,16,16,bot)
                             else:
                                 gameloop = minesweeper.MSGameLoop(game,16,16)
                             gameloop.start(16,16)
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(30,16,99)
                             if self.bot:
-                                bot = solver_bot.SolverBot(30,16,99,game) # tämä on bottia varten
-                                gameloop = minesweeper.MSGameLoop(game,30,16,bot) # tämä on bottia varten
+                                bot = solver_bot.SolverBot(30,16,99,game)
+                                gameloop = minesweeper.MSGameLoop(game,30,16,bot)
                             else:
                                 gameloop = minesweeper.MSGameLoop(game,30,16)
                             gameloop.start(30,16)
@@ -187,7 +184,7 @@ class EndWindow:
             self.window.blit(text,((55+(50/2)), (77+(100/2))))
 
             font = pygame.font.SysFont("Arial", 40)
-            text = font.render("QUIT", True, (0,0,0))
+            text = font.render("BACK", True, (0,0,0))
             self.window.blit(text,((55+(50/2)), (125+(100/2))))
 
             font = pygame.font.SysFont("Arial", 40)
@@ -208,9 +205,12 @@ class EndWindow:
                                 gameloop = minesweeper.MSGameLoop(game,w,h)
                             gameloop.start(w,h)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                            Levels()
+                            if self.bot != None:
+                                Levels(True)
+                            else:
+                                Levels()
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                            exit()
+                            StartWindow()
 
             pygame.display.flip()
             self.clock.tick(60)
@@ -252,7 +252,7 @@ class WinWindow:
             self.window.blit(text,((55+(50/2)), (77+(100/2))))
 
             font = pygame.font.SysFont("Arial", 40)
-            text = font.render("QUIT", True, (0,0,0))
+            text = font.render("BACK", True, (0,0,0))
             self.window.blit(text,((55+(50/2)), (125+(100/2))))
 
             font = pygame.font.SysFont("Arial", 40)
@@ -273,9 +273,12 @@ class WinWindow:
                                 gameloop = minesweeper.MSGameLoop(game,w,h)
                             gameloop.start(w,h)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                            Levels()
+                            if self.bot != None:
+                                Levels(True)
+                            else:
+                                Levels()
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                            exit()
+                            StartWindow()
 
             pygame.display.flip()
             self.clock.tick(60)
@@ -293,4 +296,3 @@ class Clock:
 
 if __name__ == "__main__":
     StartWindow()
-    #Levels()

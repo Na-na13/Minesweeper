@@ -1,10 +1,7 @@
-#Solver_bot
 from collections import deque
-import pygame
-import ui
-import minesweeper
 from random import choice
-
+import pygame
+import minesweeper
 
 class SolverBot:
     
