@@ -105,8 +105,8 @@ class MSGameLoop:
         while True:
             if not self.gameover and self.solver != None:
                 next_move = self.solver.next_move()
-                for move in next_move:
-                    print(move.pos,move.button)
+                #for move in next_move:
+                #    print(move.pos,move.button)
             else:
                 next_move = []
             for event in pygame.event.get() + next_move:
@@ -118,7 +118,9 @@ class MSGameLoop:
                         self.first_click = False
                     x = event.pos[0] // (CELL_SIZE + MARGIN)
                     y = event.pos[1] // (CELL_SIZE + MARGIN)
-                    if not self.gameover:
+                    if x >= w or y >= h:
+                        break
+                    elif not self.gameover:
                         if event.button == 1:
                             if not self.opened[y][x]:
                                 if self.game.minemap[y][x] != 10: # jos ruudussa ei ole miinaa
@@ -154,17 +156,13 @@ class MSGameLoop:
                                     self.game.window.blit(empty,(MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
-                                    #pygame.display.update()
-                    #else:
-                    #    play_time = f"{self.end_time - self.start_time:.2f}"
-                    #    if self.gamewin:
-                    #        ui.WinWindow(w,h,self.game.mines,play_time)
-                    #    else:
-                    #        ui.EndWindow(w,h,self.game.mines,play_time)
-
-            #font = pygame.font.SysFont("Arial", 20)
-            #mine = font.render(f"*: {self.minecounter}", True, (255,0,0))
-            #self.game.window.blit(mine,(0, (self.game.win_height-20)))  
+                    else:
+                        play_time = f"{self.end_time - self.start_time:.2f}"
+                        if self.gamewin:
+                            ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
+                        else:
+                            ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
+ 
             self.show_minecounter(w,h)  
             pygame.display.update()
             self.clock.tick(60)
@@ -239,8 +237,7 @@ class MSGameLoop:
                     pygame.draw.rect(self.game.window,(0,250,0), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
     def show_minecounter(self,w,h):
-        pygame.draw.rect(self.game.window,(255,255,255), (0, h-20, w, h))
-        pygame.display.update()
+        pygame.draw.rect(self.game.window,(0,0,0), (0, (CELL_SIZE*h)+(MARGIN*h), (CELL_SIZE*w)+(MARGIN*w), (CELL_SIZE*h)+(MARGIN*h)))
         font = pygame.font.SysFont("Arial", 20)
         total = font.render("Mines: " + str(self.minecounter), True, (255,0,0))
         self.game.window.blit(total,(0, (self.game.win_height-25)))

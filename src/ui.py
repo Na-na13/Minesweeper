@@ -32,11 +32,14 @@ class StartWindow:
                 if event.type == pygame.QUIT:
                     exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    if 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                        exit()
                     if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                         done = True
                         Levels()
+                    elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
+                        done = True
+                        Levels(True)
+                    elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
+                        exit()
 
             if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                 pygame.draw.rect(self.window, LGREY, (77, 62, 100, 50)) #left,top,w,h
@@ -56,6 +59,10 @@ class StartWindow:
             self.window.blit(text,((62+(50/2)), (15+(100/2))))
 
             font = pygame.font.SysFont("Arial", 40)
+            text = font.render("BOT", True, (0,0,0))
+            self.window.blit(text,((68+(50/2)), (70+(100/2))))
+
+            font = pygame.font.SysFont("Arial", 40)
             text = font.render("QUIT", True, (0,0,0))
             self.window.blit(text,((62+(50/2)), (125+(100/2))))
 
@@ -68,11 +75,12 @@ class StartWindow:
 
 class Levels:
 
-    def __init__(self):
+    def __init__(self, bot = False):
         pygame.init()
 
         self.win_height = 275
         self.win_width = 255
+        self.bot = bot
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
         self.window.fill(WHITE)
         pygame.display.flip()
@@ -116,21 +124,27 @@ class Levels:
                     if event.button == 1:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(10,10,10)
-                            bot = solver_bot.SolverBot(10,10,10,game) # tämä on bottia varten
-                            gameloop = minesweeper.MSGameLoop(game,10,10,bot) # tämä on bottia varten
-                            #gameloop = minesweeper.MSGameLoop(game,10,10)
+                            if self.bot:
+                                bot = solver_bot.SolverBot(10,10,10,game) # tämä on bottia varten
+                                gameloop = minesweeper.MSGameLoop(game,10,10,bot) # tämä on bottia varten
+                            else:
+                                gameloop = minesweeper.MSGameLoop(game,10,10)
                             gameloop.start(10,10)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(16,16,40)
-                            bot = solver_bot.SolverBot(16,16,40,game) # tämä on bottia varten
-                            gameloop = minesweeper.MSGameLoop(game,16,16,bot) # tämä on bottia varten
-                            #gameloop = minesweeper.MSGameLoop(game,16,16)
+                            if self.bot:
+                                bot = solver_bot.SolverBot(16,16,40,game) # tämä on bottia varten
+                                gameloop = minesweeper.MSGameLoop(game,16,16,bot) # tämä on bottia varten
+                            else:
+                                gameloop = minesweeper.MSGameLoop(game,16,16)
                             gameloop.start(16,16)
                         elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(30,16,99)
-                            bot = solver_bot.SolverBot(30,16,99,game) # tämä on bottia varten
-                            gameloop = minesweeper.MSGameLoop(game,30,16,bot) # tämä on bottia varten
-                            #gameloop = minesweeper.MSGameLoop(game,30,16)
+                            if self.bot:
+                                bot = solver_bot.SolverBot(30,16,99,game) # tämä on bottia varten
+                                gameloop = minesweeper.MSGameLoop(game,30,16,bot) # tämä on bottia varten
+                            else:
+                                gameloop = minesweeper.MSGameLoop(game,30,16)
                             gameloop.start(30,16)
 
             pygame.display.flip()
@@ -138,13 +152,14 @@ class Levels:
 
 class EndWindow:
 
-    def __init__(self,w,h,mines,play_time):
+    def __init__(self,w,h,mines,play_time,bot = None):
         pygame.init()
 
         self.win_height = 275
         self.win_width = 255
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
         self.window.fill(WHITE)
+        self.bot = bot
         self.clock = Clock()
         self.time = play_time
 
@@ -186,7 +201,11 @@ class EndWindow:
                     if event.button == 1:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(w,h,mines)
-                            gameloop = minesweeper.MSGameLoop(game,w,h)
+                            if self.bot != None:
+                                bot = solver_bot.SolverBot(w,h,mines,game)
+                                gameloop = minesweeper.MSGameLoop(game,w,h,bot)
+                            else:
+                                gameloop = minesweeper.MSGameLoop(game,w,h)
                             gameloop.start(w,h)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             Levels()
@@ -198,13 +217,14 @@ class EndWindow:
 
 class WinWindow:
     
-    def __init__(self,w,h,mines,play_time):
+    def __init__(self,w,h,mines,play_time,bot=None):
         pygame.init()
 
         self.win_height = 275
         self.win_width = 255
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
         self.window.fill(WHITE)
+        self.bot = bot
         self.clock = Clock()
         self.time = play_time
 
@@ -246,7 +266,11 @@ class WinWindow:
                     if event.button == 1:
                         if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
                             game = minesweeper.Minesweeper(w,h,mines)
-                            gameloop = minesweeper.MSGameLoop(game,w,h)
+                            if self.bot != None:
+                                bot = solver_bot.SolverBot(w,h,mines,game)
+                                gameloop = minesweeper.MSGameLoop(game,w,h,bot)
+                            else:
+                                gameloop = minesweeper.MSGameLoop(game,w,h)
                             gameloop.start(w,h)
                         elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
                             Levels()

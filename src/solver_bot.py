@@ -17,7 +17,6 @@ class SolverBot:
         self.first_move = True
         self.sidecells = []
         self.add_sidecells()
-        print(self.sidecells)
         
     def add_sidecells(self):
         for x in range(0,self.w):
@@ -42,16 +41,16 @@ class SolverBot:
             self.run_solver()
             if len(self.eventqueue) > 0:
                 return [self.eventqueue.popleft()]
-            #return []
             else:
                 self.open_random()
-                print("Arvaus!")
-                return [self.eventqueue.popleft()]
-
+                if len(self.eventqueue) > 0:
+                    return [self.eventqueue.popleft()]
+                else:
+                    self.open_random()
+                    return [self.eventqueue.popleft()]
 
     def run_solver(self):
             mines = self.search_mines()
-            #print(mines)
             for mine in mines:
                 x = mine[1]
                 y = mine[0]
@@ -59,7 +58,6 @@ class SolverBot:
                     self.sidecells.remove(mine)
                 self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),3))
             frees = self.search_frees()
-            #print(frees)
             for free in frees:
                 xx = free[1]
                 yy = free[0]
@@ -75,7 +73,7 @@ class SolverBot:
                 if 1 <= self.gamegrid[y][x] <= 8:
                     buffercells.append((x,y))
         return buffercells
-    
+
     def search_mines(self):
         buffer = self.find_buffercells()
         mine_pos = []
@@ -132,7 +130,6 @@ class SolverBot:
                         mine_pos.append(cords)
         for mine in mine_pos:
             self.gamegrid[mine[0]][mine[1]] = 30
-        #print(mine_pos)
         return mine_pos
     
     def search_frees(self):
@@ -191,7 +188,6 @@ class SolverBot:
 
     def open_random(self):
         if len(self.sidecells) > 0:
-            print("Täällä")
             valid = False
             while not valid:
                 if len(self.sidecells) == 0:
@@ -206,15 +202,44 @@ class SolverBot:
                 else:
                     self.sidecells.remove(random)
         else:
-            print("12345")
-            buffer = self.find_buffercells()
-            random = choice(buffer)
-            x = random[0]
-            y = random[1]
-            self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),1))
-
-
-
+            valid = False
+            while not valid:
+                cells = self.find_buffercells()
+                random = choice(cells)
+                pos = []
+                x = random[0]
+                y = random[1]
+                if y-1 >= 0 and x-1 >= 0:
+                    if self.gamegrid[y-1][x-1] == 20: # viistoon vasemmalle ylös
+                        pos.append((y-1,x-1))
+                if y-1 >= 0:
+                    if self.gamegrid[y-1][x] == 20: # suoraan ylös
+                        pos.append((y-1,x))
+                if y-1 >= 0 and x+1 < self.w:
+                    if self.gamegrid[y-1][x+1] == 20: # viistoon oikealle ylös
+                        pos.append((y-1,x+1))
+                if x-1 >= 0:
+                    if self.gamegrid[y][x-1] == 20: # vasen
+                        pos.append((y,x-1))
+                if x+1 < self.w:
+                    if self.gamegrid[y][x+1] == 20: # oikea
+                        pos.append((y,x+1))
+                if y+1 < self.h and x-1 >= 0:
+                    if self.gamegrid[y+1][x-1] == 20: # viistoon vasemmalle alas
+                        pos.append((y+1,x-1))
+                if y+1 < self.h:
+                    if self.gamegrid[y+1][x] == 20: # suoraan alas
+                        pos.append((y+1,x))
+                if y+1 < self.h and x+1 < self.w:
+                    if self.gamegrid[y+1][x+1] == 20: # viistoon oikealle alas
+                        pos.append((y+1,x+1))
+                
+                if len(pos) > 0:
+                    valid = True
+            result = choice(pos)
+            xx = result[1]
+            yy = result[0]
+            self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((xx*20)+(xx*5)+15, (yy*20)+(yy*5)+15),1))
 
 class Event:
 
