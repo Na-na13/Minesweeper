@@ -2,7 +2,8 @@ from random import randint
 from time import time
 import pygame
 import solver_bot
-import ui
+#import ui
+import tester
 
 
 CELL_SIZE = 20
@@ -108,7 +109,8 @@ class MSGameLoop:
                 #for move in next_move:
                 #    print(move.pos,move.button)
             else:
-                next_move = []
+                next_move = [solver_bot.Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
+                #next_move = []
             for event in pygame.event.get() + next_move:
                 if event.type == pygame.QUIT:
                     exit()
@@ -158,10 +160,12 @@ class MSGameLoop:
                                     self.minecounter += 1
                     else:
                         play_time = f"{self.end_time - self.start_time:.2f}"
-                        if self.gamewin:
-                            ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
-                        else:
-                            ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
+                        print(play_time)
+                        return
+                        #if self.gamewin:
+                        #    ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
+                        #else:
+                        #    ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
  
             self.show_minecounter(w,h)  
             pygame.display.update()
