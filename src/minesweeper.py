@@ -1,6 +1,7 @@
 from random import randint
 from time import time
 import pygame
+import event
 import solver_bot
 import ui
 import tester
@@ -109,7 +110,7 @@ class MSGameLoop:
                 #for move in next_move:
                 #    print(move.pos,move.button)
             else:
-                #next_move = [solver_bot.Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
+                #next_move = [event.Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
                 next_move = []
             for event in pygame.event.get() + next_move:
                 if event.type == pygame.QUIT:
@@ -159,9 +160,8 @@ class MSGameLoop:
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
                     else:
-                        play_time = f"{self.end_time - self.start_time:.2f}"
-                        #print(play_time)
                         #return
+                        play_time = f"{self.end_time - self.start_time:.2f}"
                         if self.gamewin:
                             ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
                         else:
