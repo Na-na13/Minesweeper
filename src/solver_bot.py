@@ -14,6 +14,7 @@ class SolverBot:
         self.first_move = True
         self.sidecells = []
         self.add_sidecells()
+        self.guesses = 0
         
     def add_sidecells(self):
         for x in range(0,self.w):
@@ -193,6 +194,7 @@ class SolverBot:
                 x = random[0]
                 y = random[1]
                 if self.gamegrid[y][x] == 20:
+                    self.guesses += 1
                     self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),1))
                     self.sidecells.remove(random)
                     valid = True
@@ -236,6 +238,7 @@ class SolverBot:
             result = choice(pos)
             xx = result[1]
             yy = result[0]
+            self.guesses += 1
             self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((xx*20)+(xx*5)+15, (yy*20)+(yy*5)+15),1))
 
 class Event:
