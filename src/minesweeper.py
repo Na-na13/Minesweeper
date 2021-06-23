@@ -1,11 +1,11 @@
 from random import randint
 from time import time
+from event import Event
+from clock import Clock
 import pygame
-import event
 import solver_bot
 import ui
 import tester
-
 
 CELL_SIZE = 20
 MARGIN = 5
@@ -22,29 +22,38 @@ class Minesweeper:
         """
         pygame.init()
         self.mines = mines
-        self.minemap = [[0 for a in range(w)] for b in range(h)]
+        self.minemap = [[0 for x in range(w)] for y in range(h)]
         self.win_height = (CELL_SIZE * h) + (MARGIN * h) + MARGIN + 20
         self.win_width = (CELL_SIZE * w) + (MARGIN * w) + MARGIN
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
         self.window.fill((0,0,0))
-
         self.draw_grid(w,h)
         self.place_mines(w,h)
         self.place_hints(w,h)
 
     def draw_grid(self,w,h):
-        # piirtää pelin pohjan
-        for j in range(0,h):
-            for i in range(0,w):
-                pygame.draw.rect(self.window,(255,255,255), (i * (CELL_SIZE + MARGIN) + MARGIN, j * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+        """Piirtää pelin pohjan
+
+        Args:
+            w (kokonaisluku): pelikentän leveys
+            h (kokonaisluku): pelikentän korkeus
+        """
+        for y in range(0, h):
+            for x in range(0, w):
+                pygame.draw.rect(self.window,(255,255,255), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
     def place_mines(self,w,h):
-        # asetetaan miinat satunnaisesti generoiduille paikoille kaksiulotteiseen miinakarttaan,
-        # joka vastaa pelin pohjaruudukkoa
+        """ Asettaa miinat satunnaisesti valituile paikoille kaksiulotteiseen miinakarttaan,
+            joka vastaa pelin pohjaruudukkoa
+
+        Args:
+            w (kokonaisluku): pelikentän leveys
+            h (kokonaisluku): pelikentän korkeus
+        """
         mines = 0
         while mines < self.mines:
-            y = randint(0,h-1) #rivit
-            x = randint(0,w-1) #kolumnit
+            y = randint(0, h - 1)
+            x = randint(0, w - 1)
             if self.minemap[y][x] == 0:
                 self.minemap[y][x] = 10
                 mines += 1
@@ -80,7 +89,11 @@ class Minesweeper:
                             self.minemap[j+1][i+1] += 1 # viistoon oikealle alas
 
     def __str__(self):
-        # Tulostaa miinojen määrän
+        """Laskee miinojen määrän miinakrtassa
+
+        Returns:
+            merkkijono: miinojen määrä
+        """
         mines = 0
         for y in range(len(self.minemap)):
             for x in range(len(self.minemap[0])):
@@ -110,8 +123,8 @@ class MSGameLoop:
                 #for move in next_move:
                 #    print(move.pos,move.button)
             else:
-                #next_move = [event.Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
-                next_move = []
+                next_move = [Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
+                #next_move = []
             for event in pygame.event.get() + next_move:
                 if event.type == pygame.QUIT:
                     exit()
@@ -160,12 +173,12 @@ class MSGameLoop:
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
                     else:
-                        #return
-                        play_time = f"{self.end_time - self.start_time:.2f}"
-                        if self.gamewin:
-                            ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
-                        else:
-                            ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
+                        return
+                        #play_time = f"{self.end_time - self.start_time:.2f}"
+                        #if self.gamewin:
+                        #    ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
+                        #else:
+                        #    ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
  
             self.show_minecounter(w,h)  
             pygame.display.update()

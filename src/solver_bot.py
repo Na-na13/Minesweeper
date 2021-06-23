@@ -1,8 +1,9 @@
 from collections import deque
 from random import choice
+from event import Event
 import pygame
 import minesweeper
-import event
+
 
 class SolverBot:
     
@@ -32,7 +33,7 @@ class SolverBot:
 
     def next_move(self):
         if self.first_move:
-            self.eventqueue.append(event.Event(pygame.MOUSEBUTTONDOWN, (10,10),1))
+            self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN, (10,10),1))
             self.first_move = False
         if len(self.eventqueue) > 0:
             return [self.eventqueue.popleft()]
@@ -55,7 +56,7 @@ class SolverBot:
                 y = mine[0]
                 if mine in self.sidecells:
                     self.sidecells.remove(mine)
-                self.eventqueue.append(event.Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),3))
+                self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),3))
             frees = self.search_frees()
             for free in frees:
                 xx = free[1]
@@ -63,7 +64,7 @@ class SolverBot:
                 if self.gamegrid[yy][xx] == 20:
                     if free in self.sidecells:
                         self.sidecells.remove(free)
-                    self.eventqueue.append(event.Event(pygame.MOUSEBUTTONDOWN,((xx*20)+(xx*5)+15, (yy*20)+(yy*5)+15),1))
+                    self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((xx*20)+(xx*5)+15, (yy*20)+(yy*5)+15),1))
     
     def find_buffercells(self):
         buffercells = []
@@ -196,7 +197,7 @@ class SolverBot:
                 y = random[1]
                 if self.gamegrid[y][x] == 20:
                     self.guesses += 1
-                    self.eventqueue.append(event.Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),1))
+                    self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((x*20)+(x*5)+15, (y*20)+(y*5)+15),1))
                     self.sidecells.remove(random)
                     valid = True
                 else:
@@ -240,5 +241,5 @@ class SolverBot:
             xx = result[1]
             yy = result[0]
             self.guesses += 1
-            self.eventqueue.append(event.Event(pygame.MOUSEBUTTONDOWN,((xx*20)+(xx*5)+15, (yy*20)+(yy*5)+15),1))
+            self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,((xx*20)+(xx*5)+15, (yy*20)+(yy*5)+15),1))
 

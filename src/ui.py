@@ -1,8 +1,7 @@
+from clock import Clock
 import pygame
 import minesweeper
 import solver_bot
-
-
 
 WHITE = (255,255,255)
 DGREY = (128,128,128)
@@ -21,7 +20,7 @@ class StartWindow:
         pygame.display.set_caption("Minesweeper")
 
 
-        clock = pygame.time.Clock()
+        clock = Clock()
         done = False
         while not done:
             for event in pygame.event.get():
@@ -283,16 +282,7 @@ class WinWindow:
             pygame.display.flip()
             self.clock.tick(60)
 
-class Clock:
 
-    def __init__(self):
-        self.clock = pygame.time.Clock()
-
-    def tick(self, fps):
-        self.clock.tick(fps)
-
-    def get_ticks(self):
-        return pygame.time.get_ticks()
 
 if __name__ == "__main__":
     StartWindow()
