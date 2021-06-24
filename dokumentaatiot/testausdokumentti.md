@@ -23,10 +23,10 @@ Testattaessa pelin koodiin pitää tehdä pieniä muutoksia, jotta botti pystyy 
 ...
 ```
 
-Testasin botin suoritumista pelattamalla sillä 200 peliä jokaisella vaikeustasolla. Alla olevaan taulukkoon olen listannut tulokset. Tulosten tarkkuuteen vaikuttaa jonkin verran satunnaisuus, sillä pelikentän miinapaikat valitaan satunnaisesti ja peleissä tulee vastaan tilanteita, joissa pääse etenemään vain valitsemalla seuraavaksi avattavaksi ruuduksi satunnaisen ruudun.
+Testasin botin suoritumista pelattamalla sillä 500 peliä jokaisella vaikeustasolla. Alla olevaan taulukkoon olen listannut tulokset. Tulosten tarkkuuteen vaikuttaa jonkin verran satunnaisuus, sillä pelikentän miinapaikat valitaan satunnaisesti ja peleissä tulee vastaan tilanteita, joissa pääse etenemään vain valitsemalla seuraavaksi avattavaksi ruuduksi satunnaisen ruudun.
 
 Vaikeustaso | Voitot | Häviöt | Voitto%
 ----------- | ------ | ------ | -------
-Helppo|179|21|89,5 %
-Normaali|93|107|46,5 %
-Vaikea|5|195|2,5 %
+Helppo|434|66|86,8 %
+Normaali|229|271|45,8 %
+Vaikea|8|492|1,6 %
