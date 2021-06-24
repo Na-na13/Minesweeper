@@ -1,24 +1,29 @@
 from random import randint
 from time import time
+import pygame
+
 from event import Event
 from clock import Clock
-import pygame
-import solver_bot
-import ui
-import tester
 
 CELL_SIZE = 20
 MARGIN = 5
+MINE = 10
+WHITE = 255,255,255
+BLACK = 0,0,0
+GREY = 128,128,128
+RED = 255,0,0
+GREEN = 0,250,0
+BLUE = 0,0,255
 
 class Minesweeper:
 
     def __init__(self,w,h,mines):
-        """[summary]
+        """Pelikentän alustaminen
 
         Args:
-            w ([type]): [description]
-            h ([type]): [description]
-            mines ([type]): [description]
+            w: pelikentän leveys
+            h: pelikentän korkeus
+            mines: miinojen lukumäärä
         """
         pygame.init()
         self.mines = mines
@@ -26,7 +31,7 @@ class Minesweeper:
         self.win_height = (CELL_SIZE * h) + (MARGIN * h) + MARGIN + 20
         self.win_width = (CELL_SIZE * w) + (MARGIN * w) + MARGIN
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
-        self.window.fill((0,0,0))
+        self.window.fill(BLACK)
         self.draw_grid(w,h)
         self.place_mines(w,h)
         self.place_hints(w,h)
@@ -35,80 +40,95 @@ class Minesweeper:
         """Piirtää pelin pohjan
 
         Args:
-            w (kokonaisluku): pelikentän leveys
-            h (kokonaisluku): pelikentän korkeus
+            w: pelikentän leveys
+            h: pelikentän korkeus
         """
         for y in range(0, h):
             for x in range(0, w):
-                pygame.draw.rect(self.window,(255,255,255), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                pygame.draw.rect(self.window, WHITE, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
     def place_mines(self,w,h):
         """ Asettaa miinat satunnaisesti valituile paikoille kaksiulotteiseen miinakarttaan,
             joka vastaa pelin pohjaruudukkoa
 
         Args:
-            w (kokonaisluku): pelikentän leveys
-            h (kokonaisluku): pelikentän korkeus
+            w: pelikentän leveys
+            h: pelikentän korkeus
         """
         mines = 0
         while mines < self.mines:
             y = randint(0, h - 1)
             x = randint(0, w - 1)
             if self.minemap[y][x] == 0:
-                self.minemap[y][x] = 10
+                self.minemap[y][x] = MINE
                 mines += 1
 
     def place_hints(self,w,h):
-        # asetetaan miinoista kertovat vihjeet miinojen naapuriruutuihin
-        for j in range(0,h):
-            for i in range(0,w): # j = y, i = x
-                if self.minemap[j][i] == 10: # (y-1,x-1);(y-1,x);(y-1,x+1);(y,x-1);(y,x+1);(y+1,x-1);(y+1,x);(y+1,x+1)
-                    if j-1 >= 0 and i-1 >= 0:
-                        if self.minemap[j-1][i-1] != 10:
-                            self.minemap[j-1][i-1] += 1 # viistoon vasemmalle ylös
-                    if j-1 >= 0:
-                        if self.minemap[j-1][i] != 10:
-                            self.minemap[j-1][i] += 1 # suoraan ylös
-                    if j-1 >= 0 and i+1 < w:
-                        if self.minemap[j-1][i+1] != 10:
-                            self.minemap[j-1][i+1] += 1 # viistoon oikealle ylös
-                    if i-1 >= 0:
-                        if self.minemap[j][i-1] != 10:
-                            self.minemap[j][i-1] += 1 # vasen
-                    if i+1 < w:
-                        if self.minemap[j][i+1] != 10:
-                            self.minemap[j][i+1] += 1 # oikea
-                    if j+1 < h and i-1 >= 0:
-                        if self.minemap[j+1][i-1] != 10:
-                            self.minemap[j+1][i-1] += 1 # viistoon vasemmalle alas
-                    if j+1 < h:
-                        if self.minemap[j+1][i] != 10:
-                            self.minemap[j+1][i] += 1 # suoraan alas
-                    if j+1 < h and i+1 < w:
-                        if self.minemap[j+1][i+1] != 10:
-                            self.minemap[j+1][i+1] += 1 # viistoon oikealle alas
+        """Asettaan miinoista kertovat vihjeet miinojen naapuriruutuihin
+
+        Args:
+            w: pelikentän leveys
+            h: pelikentän korkeus
+        """
+        for y in range(0, h):
+            for x in range(0, w):
+                if self.minemap[y][x] == MINE:
+                    # (y-1,x-1);(y-1,x);(y-1,x+1);(y,x-1);(y,x+1);(y+1,x-1);(y+1,x);(y+1,x+1)
+                    if y-1 >= 0 and x-1 >= 0:
+                        if self.minemap[y-1][x-1] != MINE:
+                            self.minemap[y-1][x-1] += 1 # viistoon vasemmalle ylös
+                    if y-1 >= 0:
+                        if self.minemap[y-1][x] != MINE:
+                            self.minemap[y-1][x] += 1 # suoraan ylös
+                    if y-1 >= 0 and x+1 < w:
+                        if self.minemap[y-1][x+1] != MINE:
+                            self.minemap[y-1][x+1] += 1 # viistoon oikealle ylös
+                    if x-1 >= 0:
+                        if self.minemap[y][x-1] != MINE:
+                            self.minemap[y][x-1] += 1 # vasen
+                    if x+1 < w:
+                        if self.minemap[y][x+1] != MINE:
+                            self.minemap[y][x+1] += 1 # oikea
+                    if y+1 < h and x-1 >= 0:
+                        if self.minemap[y+1][x-1] != MINE:
+                            self.minemap[y+1][x-1] += 1 # viistoon vasemmalle alas
+                    if y+1 < h:
+                        if self.minemap[y+1][x] != MINE:
+                            self.minemap[y+1][x] += 1 # suoraan alas
+                    if y+1 < h and x+1 < w:
+                        if self.minemap[y+1][x+1] != MINE:
+                            self.minemap[y+1][x+1] += 1 # viistoon oikealle alas
 
     def __str__(self):
         """Laskee miinojen määrän miinakrtassa
 
         Returns:
-            merkkijono: miinojen määrä
+            miinojen määrä merkkijono-muodossa
         """
         mines = 0
         for y in range(len(self.minemap)):
             for x in range(len(self.minemap[0])):
-                if self.minemap[x][y] == 10:
+                if self.minemap[y][x] == MINE:
                     mines += 1
         return f"Mines: {mines}"
 
 class MSGameLoop:
 
     def __init__(self,game,w,h,solver = None):
+        """Pelisilmukka, jossa päivitetään pelaajan liikkeet näkyviin pelinäkymään
+
+        Args:
+            game: pelikenttä-olio miinoine ja vihjeineen
+            w: pelikentän leveys
+            h: pelikentän korkeus
+            solver: pelin ratkaisijabotti-olio, oletusarvo None.
+        """
         self.game = game
         self.solver = solver
         self.opened = [[False for x in range(w)] for y in range(h)]
         self.doubted = [[False for x in range(w)] for y in range(h)]
-        self.clock = pygame.time.Clock()
+        self.clock = Clock()
         self.gameover = False
         self.gamewin = False
         self.first_click = True
@@ -118,10 +138,8 @@ class MSGameLoop:
 
     def start(self,w,h):
         while True:
-            if not self.gameover and self.solver != None:
+            if not self.gameover and self.solver is not None:
                 next_move = self.solver.next_move()
-                #for move in next_move:
-                #    print(move.pos,move.button)
             else:
                 next_move = [Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
                 #next_move = []
@@ -136,10 +154,10 @@ class MSGameLoop:
                     y = event.pos[1] // (CELL_SIZE + MARGIN)
                     if x >= w or y >= h:
                         break
-                    elif not self.gameover:
-                        if event.button == 1:
+                    if not self.gameover:
+                        if event.button == 1: # ruudun avaaminen
                             if not self.opened[y][x]:
-                                if self.game.minemap[y][x] != 10: # jos ruudussa ei ole miinaa
+                                if self.game.minemap[y][x] != MINE: # jos ruudussa ei ole miinaa
                                     self.dfs(y,x,w,h)
                                     self.open_cells(w,h)
                                     if self.is_won(w,h):
@@ -148,28 +166,29 @@ class MSGameLoop:
                                         self.end_time = time()
                                         self.win(w,h)
                                         continue
-                                        #voitto
                                 else: # jos ruudussa on miina
-                                    pygame.draw.rect(self.game.window,(255,0,0), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                                    pygame.draw.rect(self.game.window, RED, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
                                     font = pygame.font.SysFont("Arial", 40)
-                                    mine = font.render("*", True, (0,0,0))
-                                    self.game.window.blit(mine,(MARGIN + (x * 20) + (x * 5) + 3, MARGIN + (y * 20) + (y * 5) - 4))
+                                    mine = font.render("*", True, BLACK)
+                                    self.game.window.blit(mine,(MARGIN + (x * 20) + (x * 5) + 3,
+                                                        MARGIN + (y * 20) + (y * 5) - 4))
                                     self.gameover = True
-                                    self.mine_explosion(w,h)
                                     self.end_time = time()
+                                    self.mine_explosion(w,h)
                                     continue
                         elif event.button == 3: # miinaepäilyn merkintä
                             if not self.opened[y][x]:
                                 font = pygame.font.SysFont("Arial", 20)
                                 if not self.doubted[y][x]:
-                                    doubt = font.render("?", True, (0,0,255))
-                                    self.game.window.blit(doubt,(MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
+                                    doubt = font.render("?", True, BLUE)
+                                    self.game.window.blit(doubt,(MARGIN + (x * 20) + (x * 5) + 4,
+                                                        MARGIN + (y * 20) + (y * 5) - 2))
                                     self.doubted[y][x] = True
                                     self.minecounter -= 1
                                 else:
-                                    pygame.draw.rect(self.game.window,(255,255,255), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
-                                    empty = font.render("", True, (0,0,255))
-                                    self.game.window.blit(empty,(MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
+                                    pygame.draw.rect(self.game.window, WHITE, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
                     else:
@@ -178,29 +197,36 @@ class MSGameLoop:
                         #if self.gamewin:
                         #    ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
                         #else:
-                        #    ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
- 
-            self.show_minecounter(w,h)  
+                        #   ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
+
+            self.show_minecounter(w,h)
             pygame.display.update()
             self.clock.tick(60)
 
     def dfs(self,y,x,w,h):
-        # käydään syvyyshaulla läpi klikatun ruudun naapuriruudut jne, ja merkataan avatuiksi kaikki
-        # vierekkäiset ruudut, joiden arvo on < 10 ja lopetetaan haku, jos arvo on > 0 mutta < 10
+        """Käydään syvyyshaulla läpi klikatun ruudun naapuriruudut jne,
+            ja merkataan avatuiksi kaikki vierekkäiset ruudut, joiden
+            arvo on < 10 (MINE) ja lopetetaan haku,
+            jos arvo on > 0 mutta < 10 (MINE)
+
+        Args:
+            y: y-akselin koordinaatti peliruudukossa
+            x: x-akselin koordinaatti peliruudukossa
+            w: pelikentän leveys
+            h: pelikentän korkeus
+        """
         if y < 0 or x < 0 or y >= h or x >= w:
             return
         if self.opened[y][x]:
             return
         if  0 < self.game.minemap[y][x] < 10:
             self.opened[y][x] = True
-            if self.solver != None:
+            if self.solver is not None:
                 self.solver.gamegrid[y][x] = self.game.minemap[y][x]
-                #print(self.solver.gamegrid)
             return
         self.opened[y][x] = True
-        if self.solver != None:
+        if self.solver is not None:
             self.solver.gamegrid[y][x] = self.game.minemap[y][x]
-            #print(self.solver.gamegrid)
         self.dfs(y-1,x-1,w,h)
         self.dfs(y-1,x,w,h)
         self.dfs(y-1,x+1,w,h)
@@ -211,56 +237,82 @@ class MSGameLoop:
         self.dfs(y+1,x+1,w,h)
 
     def open_cells(self,w,h):
-        # piirtää avatuiksi kaikki avatut ruudut
-        for a in range(h):
-            for b in range(w):
-                if self.opened[a][b]:
-                    pygame.draw.rect(self.game.window,(128,128,128), (b * (CELL_SIZE + MARGIN) + MARGIN, a * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+        """Piirtää pelinäkymään avatuiksi kaikki pelikentän avatut ruudut
+
+        Args:
+            w: pelikentän leveys
+            h: pelikentän korkeus
+        """
+        for y in range(h):
+            for x in range(w):
+                if self.opened[y][x]:
+                    pygame.draw.rect(self.game.window, GREY, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
                     font = pygame.font.SysFont("Arial", 20)
-                    get_number = self.game.minemap[a][b]
+                    get_number = self.game.minemap[y][x]
                     if get_number == 0:
-                        number = font.render("", True, (0,0,255))
+                        number = font.render("", True, BLUE)
                     else:
-                        number = font.render(str(get_number), True, (0,0,255))
-                    self.game.window.blit(number,(MARGIN + (b * 20) + (b * 5) + 4, MARGIN + (a * 20) + (a * 5) - 2))
+                        number = font.render(str(get_number), True, BLUE)
+                    self.game.window.blit(number,(MARGIN + (x * 20) + (x * 5) + 4,
+                                            MARGIN + (y * 20) + (y * 5) - 2))
 
     def mine_explosion(self,w,h):
-        # kun on klikattu miinaa, räjäytetään kaikki miinat
+        """Kun pelaaja avaa ruudun, jossa on miina, räjäytetään kaikki miinat.
+            Jos miinaepäily ei ole oikein, laitetaan väärän epäilyn päälle
+            punainen "X"
+
+        Args:
+            w: pelikentän leveys
+            h: pelikentän korkeus
+        """
         for y in range(h):
             for x in range(w):
-                if self.game.minemap[y][x] == 10:
-                    pygame.draw.rect(self.game.window,(255,0,0), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                if self.game.minemap[y][x] == MINE:
+                    pygame.draw.rect(self.game.window, RED, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
                     font = pygame.font.SysFont("Arial", 40)
-                    mine = font.render("*", True, (0,0,0))
-                    self.game.window.blit(mine, (MARGIN + (x * 20) + (x * 5) + 3, MARGIN + (y * 20) + (y * 5) - 4))
-                elif self.doubted[y][x] and not self.opened[y][x]: # jos epäilty ei ole miina, laitetaan punainen x
+                    mine = font.render("*", True, BLACK)
+                    self.game.window.blit(mine, (MARGIN + (x * 20) + (x * 5) + 3,
+                                            MARGIN + (y * 20) + (y * 5) - 4))
+                elif self.doubted[y][x] and not self.opened[y][x]:
                     font = pygame.font.SysFont("Arial", 20)
-                    fail = font.render("X", True, (255,0,0))
-                    self.game.window.blit(fail, (MARGIN + (x * 20) + (x * 5) + 4, MARGIN + (y * 20) + (y * 5) - 2))
+                    fail = font.render("X", True, RED)
+                    self.game.window.blit(fail, (MARGIN + (x * 20) + (x * 5) + 4,
+                                            MARGIN + (y * 20) + (y * 5) - 2))
 
     def is_won(self,w,h):
-        # tarkistetaan jokaisen klikkauksen jälkeen onko voitettu
+        """Tarkistaa jokaisen ruudun avauksen jälkeen onko peli voitettu
+
+        Args:
+            w: pelikentän leveys
+            h: pelikentän korkeus
+
+        Returns:
+            True, jos voitettu, False, jos ei voitettu
+        """
         for y in range(h):
             for x in range(w):
-                if self.opened[y][x] == False and self.game.minemap[y][x] != 10:
-                    return False 
+                if self.opened[y][x] is False and self.game.minemap[y][x] != MINE:
+                    return False
         return True
 
     def win(self,w,h):
-        # jos peli voitetaan, piirtää kaikkien miinojen kohdalle vihreän ruudun
+        """Jos peli voitetaan, piirtää pelinäkymään kaikkien miinojen kohdalle vihreän ruudun
+
+        Args:
+            w: pelikentän leveys
+            h: pelikentän korkeus
+        """
         for y in range(h):
             for x in range(w):
-                if self.game.minemap[y][x] == 10:
-                    pygame.draw.rect(self.game.window,(0,250,0), (x * (CELL_SIZE + MARGIN) + MARGIN, y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                if self.game.minemap[y][x] == MINE:
+                    pygame.draw.rect(self.game.window,GREEN, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
     def show_minecounter(self,w,h):
-        pygame.draw.rect(self.game.window,(0,0,0), (0, (CELL_SIZE*h)+(MARGIN*h), (CELL_SIZE*w)+(MARGIN*w), (CELL_SIZE*h)+(MARGIN*h)))
+        pygame.draw.rect(self.game.window, BLACK, (0, (CELL_SIZE*h)+(MARGIN*h),
+                        (CELL_SIZE*w)+(MARGIN*w), (CELL_SIZE*h)+(MARGIN*h)))
         font = pygame.font.SysFont("Arial", 20)
-        total = font.render("Mines: " + str(self.minecounter), True, (255,0,0))
+        total = font.render("Mines: " + str(self.minecounter), True, RED)
         self.game.window.blit(total,(0, (self.game.win_height-25)))
-
-if __name__ == "__main__":
-    easy = (10,10,10)
-    normal = (16,16,40)
-    hard = (30,16,99)
-    Minesweeper(10,10,10)

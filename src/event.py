@@ -4,3 +4,4 @@ class Event:
         self.type = type
         self.pos = pos
         self.button = but
+        

@@ -7,4 +7,3 @@ class Clock:
 
     def tick(self, fps):
         self.clock.tick(fps)
-        
