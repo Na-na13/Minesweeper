@@ -1,0 +1,17 @@
+astroid           2.5.6  An abstract syntax tree for Python with inference support.
+attrs             21.2.0 Classes Without Boilerplate
+coverage          5.5    Code coverage measurement for Python
+iniconfig         1.1.1  iniconfig: brain-dead simple config-ini parsing
+invoke            1.5.0  Pythonic task execution
+isort             5.9.1  A Python utility / library to sort Python imports.
+lazy-object-proxy 1.6.0  A fast and thorough lazy object proxy.
+mccabe            0.6.1  McCabe checker, plugin for flake8
+packaging         20.9   Core utilities for Python packages
+pluggy            0.13.1 plugin and hook calling mechanisms for python
+py                1.10.0 library with cross-python path, ini-parsing, io, code, log facilities
+pygame            2.0.1  Python Game Development
+pylint            2.8.3  python code static checker
+pyparsing         2.4.7  Python parsing module
+pytest            6.2.4  pytest: simple powerful testing with Python
+toml              0.10.2 Python Library for Tom's Obvious, Minimal Language
+wrapt             1.12.1 Module for decorators, wrappers and monkey patching.
