@@ -149,7 +149,7 @@ class Levels:
 
 class EndWindow:
 
-    def __init__(self,w,h,mines,play_time,bot = None):
+    def __init__(self,w,h,mines,play_time,win,bot = None):
         pygame.init()
 
         self.win_height = 275
@@ -157,6 +157,7 @@ class EndWindow:
         self.window = pygame.display.set_mode((self.win_width, self.win_height))
         self.window.fill(WHITE)
         self.bot = bot
+        self.win = win
         self.clock = Clock()
         self.time = play_time
 
@@ -188,7 +189,10 @@ class EndWindow:
             self.window.blit(text,((55+(50/2)), (125+(100/2))))
 
             font = pygame.font.SysFont("Arial", 40)
-            text = font.render("YOU LOSE" + self.time, True, (0,0,0))
+            if self.win:
+                text = font.render("YOU WIN" + self.time, True, (0,0,0))
+            else:
+                text = font.render("YOU LOSE" + self.time, True, (0,0,0))
             self.window.blit(text,(0, 0))
 
             for event in pygame.event.get():
@@ -214,76 +218,6 @@ class EndWindow:
 
             pygame.display.flip()
             self.clock.tick(60)
-
-class WinWindow:
-    
-    def __init__(self,w,h,mines,play_time,bot=None):
-        pygame.init()
-
-        self.win_height = 275
-        self.win_width = 255
-        self.window = pygame.display.set_mode((self.win_width, self.win_height))
-        self.window.fill(WHITE)
-        self.bot = bot
-        self.clock = Clock()
-        self.time = play_time
-
-        while True:
-            mouse = pygame.mouse.get_pos()
-            if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window, LGREY, (77, 62, 100, 50)) #left,top,w,h
-            else:
-                pygame.draw.rect(self.window,(128,128,128), (77, 62, 100, 50))
-            if 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window, LGREY, (77, 117, 100, 50))
-            else:
-                pygame.draw.rect(self.window,(128,128,128), (77, 117, 100, 50))
-            if 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                pygame.draw.rect(self.window, LGREY, (77, 172, 100, 50))
-            else:
-                pygame.draw.rect(self.window,(128,128,128), (77, 172, 100, 50))
-
-            font = pygame.font.SysFont("Arial", 40)
-            text = font.render("RETRY", True, (0,0,0))
-            self.window.blit(text,((55+(50/2)), (15+(100/2))))
-
-            font = pygame.font.SysFont("Arial", 27)
-            text = font.render("CHANGE LEVEL", True, (0,0,0))
-            self.window.blit(text,((55+(50/2)), (77+(100/2))))
-
-            font = pygame.font.SysFont("Arial", 40)
-            text = font.render("BACK", True, (0,0,0))
-            self.window.blit(text,((55+(50/2)), (125+(100/2))))
-
-            font = pygame.font.SysFont("Arial", 40)
-            text = font.render("YOU WIN!" + self.time, True, (0,0,0))
-            self.window.blit(text,(0, 0))
-
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    exit()
-                elif event.type == pygame.MOUSEBUTTONDOWN:
-                    if event.button == 1:
-                        if 62 < mouse[1] < 62+50 and 77 < mouse[0] < 77+100:
-                            game = minesweeper.Minesweeper(w,h,mines)
-                            if self.bot is not None:
-                                bot = SolverBot(w,h,game)
-                                gameloop = minesweeper.MSGameLoop(game,w,h,bot)
-                            else:
-                                gameloop = minesweeper.MSGameLoop(game,w,h)
-                            gameloop.start(w,h)
-                        elif 117 < mouse[1] < 117+50 and 77 < mouse[0] < 77+100:
-                            if self.bot is not None:
-                                Levels(True)
-                            else:
-                                Levels()
-                        elif 172 < mouse[1] < 172+50 and 77 < mouse[0] < 77+100:
-                            StartWindow()
-
-            pygame.display.flip()
-            self.clock.tick(60)
-
-
 
 if __name__ == "__main__":
     StartWindow()

@@ -42,5 +42,23 @@ class Tester:
         print(f"Voittoprosentti: {(wincounter/self.times)*100} %")
 
 if __name__ == "__main__":
-    test = Tester(N,10)
-    test.start()
+    try:
+        level = input("Choose level (E, N, H): ")
+        times = int(input("Choose how many times: "))
+    except ValueError:
+        level = "X"
+        times = -1
+
+    if level in ["E", "N", "H"] and times > 0:
+        if level == "E":
+            test = Tester(E,times)
+            test.start()
+        if level == "N":
+            test = Tester(N,times)
+            test.start()
+        if level == "H":
+            test = Tester(H,times)
+            test.start()
+    else:
+        print("Invalid input")
+   

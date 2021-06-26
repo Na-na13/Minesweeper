@@ -1,6 +1,8 @@
 from random import randint
 from time import time
 import pygame
+from ui import EndWindow
+
 
 from event import Event
 from clock import Clock
@@ -45,8 +47,9 @@ class Minesweeper:
         """
         for y in range(0, h):
             for x in range(0, w):
-                pygame.draw.rect(self.window, WHITE, (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                pygame.draw.rect(
+                    self.window, WHITE, (x * (CELL_SIZE + MARGIN) + MARGIN,
+                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
 
     def place_mines(self,w,h):
         """ Asettaa miinat satunnaisesti valituile paikoille kaksiulotteiseen miinakarttaan,
@@ -141,8 +144,8 @@ class MSGameLoop:
             if not self.gameover and self.solver is not None:
                 next_move = self.solver.next_move()
             else:
-                next_move = [Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
-                #next_move = []
+                #next_move = [Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
+                next_move = []
             for event in pygame.event.get() + next_move:
                 if event.type == pygame.QUIT:
                     exit()
@@ -167,12 +170,16 @@ class MSGameLoop:
                                         self.win(w,h)
                                         continue
                                 else: # jos ruudussa on miina
-                                    pygame.draw.rect(self.game.window, RED, (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                                    pygame.draw.rect(
+                                        self.game.window, RED, 
+                                        (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                        y * (CELL_SIZE + MARGIN) + MARGIN, 
+                                        CELL_SIZE, CELL_SIZE))
                                     font = pygame.font.SysFont("Arial", 40)
                                     mine = font.render("*", True, BLACK)
-                                    self.game.window.blit(mine,(MARGIN + (x * 20) + (x * 5) + 3,
-                                                        MARGIN + (y * 20) + (y * 5) - 4))
+                                    self.game.window.blit(
+                                        mine,(MARGIN + (x * 20) + (x * 5) + 3,
+                                        MARGIN + (y * 20) + (y * 5) - 4))
                                     self.gameover = True
                                     self.end_time = time()
                                     self.mine_explosion(w,h)
@@ -182,22 +189,26 @@ class MSGameLoop:
                                 font = pygame.font.SysFont("Arial", 20)
                                 if not self.doubted[y][x]:
                                     doubt = font.render("?", True, BLUE)
-                                    self.game.window.blit(doubt,(MARGIN + (x * 20) + (x * 5) + 4,
-                                                        MARGIN + (y * 20) + (y * 5) - 2))
+                                    self.game.window.blit(
+                                        doubt,(MARGIN + (x * 20) + (x * 5) + 4,
+                                        MARGIN + (y * 20) + (y * 5) - 2))
                                     self.doubted[y][x] = True
                                     self.minecounter -= 1
                                 else:
-                                    pygame.draw.rect(self.game.window, WHITE, (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                                    pygame.draw.rect(
+                                        self.game.window, WHITE, 
+                                        (x * (CELL_SIZE + MARGIN) + MARGIN,
+                                        y * (CELL_SIZE + MARGIN) + MARGIN,
+                                        CELL_SIZE, CELL_SIZE))
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
                     else:
-                        return
-                        #play_time = f"{self.end_time - self.start_time:.2f}"
+                        #return
+                        play_time = f"{self.end_time - self.start_time:.2f}"
                         #if self.gamewin:
                         #    ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
                         #else:
-                        #   ui.EndWindow(w,h,self.game.mines,play_time,self.solver)
+                        EndWindow(w,h,self.game.mines,play_time,self.gamewin,self.solver)
 
             self.show_minecounter(w,h)
             pygame.display.update()
@@ -246,16 +257,20 @@ class MSGameLoop:
         for y in range(h):
             for x in range(w):
                 if self.opened[y][x]:
-                    pygame.draw.rect(self.game.window, GREY, (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                    pygame.draw.rect(
+                        self.game.window, GREY,
+                        (x * (CELL_SIZE + MARGIN) + MARGIN,
+                        y * (CELL_SIZE + MARGIN) + MARGIN,
+                        CELL_SIZE, CELL_SIZE))
                     font = pygame.font.SysFont("Arial", 20)
                     get_number = self.game.minemap[y][x]
                     if get_number == 0:
                         number = font.render("", True, BLUE)
                     else:
                         number = font.render(str(get_number), True, BLUE)
-                    self.game.window.blit(number,(MARGIN + (x * 20) + (x * 5) + 4,
-                                            MARGIN + (y * 20) + (y * 5) - 2))
+                    self.game.window.blit(
+                        number,(MARGIN + (x * 20) + (x * 5) + 4,
+                        MARGIN + (y * 20) + (y * 5) - 2))
 
     def mine_explosion(self,w,h):
         """Kun pelaaja avaa ruudun, jossa on miina, räjäytetään kaikki miinat.
@@ -269,17 +284,22 @@ class MSGameLoop:
         for y in range(h):
             for x in range(w):
                 if self.game.minemap[y][x] == MINE:
-                    pygame.draw.rect(self.game.window, RED, (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                    pygame.draw.rect(
+                        self.game.window, RED,
+                        (x * (CELL_SIZE + MARGIN) + MARGIN,
+                        y * (CELL_SIZE + MARGIN) + MARGIN,
+                        CELL_SIZE, CELL_SIZE))
                     font = pygame.font.SysFont("Arial", 40)
                     mine = font.render("*", True, BLACK)
-                    self.game.window.blit(mine, (MARGIN + (x * 20) + (x * 5) + 3,
-                                            MARGIN + (y * 20) + (y * 5) - 4))
+                    self.game.window.blit(
+                        mine, (MARGIN + (x * 20) + (x * 5) + 3,
+                        MARGIN + (y * 20) + (y * 5) - 4))
                 elif self.doubted[y][x] and not self.opened[y][x]:
                     font = pygame.font.SysFont("Arial", 20)
                     fail = font.render("X", True, RED)
-                    self.game.window.blit(fail, (MARGIN + (x * 20) + (x * 5) + 4,
-                                            MARGIN + (y * 20) + (y * 5) - 2))
+                    self.game.window.blit(
+                        fail, (MARGIN + (x * 20) + (x * 5) + 4,
+                        MARGIN + (y * 20) + (y * 5) - 2))
 
     def is_won(self,w,h):
         """Tarkistaa jokaisen ruudun avauksen jälkeen onko peli voitettu
@@ -307,12 +327,18 @@ class MSGameLoop:
         for y in range(h):
             for x in range(w):
                 if self.game.minemap[y][x] == MINE:
-                    pygame.draw.rect(self.game.window,GREEN, (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                    y * (CELL_SIZE + MARGIN) + MARGIN, CELL_SIZE, CELL_SIZE))
+                    pygame.draw.rect(
+                        self.game.window,GREEN,
+                        (x * (CELL_SIZE + MARGIN) + MARGIN,
+                        y * (CELL_SIZE + MARGIN) + MARGIN, 
+                        CELL_SIZE, CELL_SIZE))
 
     def show_minecounter(self,w,h):
-        pygame.draw.rect(self.game.window, BLACK, (0, (CELL_SIZE*h)+(MARGIN*h),
-                        (CELL_SIZE*w)+(MARGIN*w), (CELL_SIZE*h)+(MARGIN*h)))
+        pygame.draw.rect(
+            self.game.window, BLACK,
+            (0, (CELL_SIZE*h)+(MARGIN*h),
+            (CELL_SIZE*w)+(MARGIN*w),
+            (CELL_SIZE*h)+(MARGIN*h)))
         font = pygame.font.SysFont("Arial", 20)
         total = font.render("Mines: " + str(self.minecounter), True, RED)
         self.game.window.blit(total,(0, (self.game.win_height-25)))
