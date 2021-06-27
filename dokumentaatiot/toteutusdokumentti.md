@@ -24,7 +24,7 @@ Pelin toiminnassa ei ole ilmennyt vakavia puutteita eli peli itsessään toimii 
 
 ![alt text](https://github.com/Na-na13/Minesweeper/blob/master/kuvat/pygame_aloitus.png)       ![alt text](https://github.com/Na-na13/Minesweeper/blob/master/kuvat/tkinter_aloitus.png) 
 
-Muissakin valikoissa on joitakin kosmeettisia vikoja, kuten lopetusvalikossa näkyvä peliin käytetyn ajan sijoittelu ja keskimmäisen painikkeen tekstin sijoittelu (menee painikkeen reunojen yli). Koska valikot oli tarkoitus muuttaa kokonaan toimimaan toisella tavalla, on myös niiden koodi hiukan sekava ja toisteinen eikä sitä ole kommentoitu.
+Muissakin valikoissa on joitakin kosmeettisia vikoja, kuten lopetusvalikossa näkyvä peliin käytetyn ajan sijoittelu ja keskimmäisen painikkeen tekstin sijoittelu (menee painikkeen reunojen yli). Koska valikot oli tarkoitus muuttaa kokonaan toimimaan toisella tavalla, on myös niiden koodi hiukan sekava ja toisteinen eikä sitä ole kommentoitu. Myös ratkaisijabotin koodi jäi toisteiseksi. Puskuriruutujen naapuriruutujen etsimiselle oli tarkoitus tehdä oma funktio, koska sama asia tehdään nyt kolmeen kertaan eri funktioissa.
 
 Yksi suuri puute koko projektissa on yksikkötestejen lähes täydellinen puute. En ole vastaavanlaista projektia aikaisemmin toteuttanut, joten testien tekeminen ei oikein luonnistunut, vaikka tietyt testauskohteet olivatkin selkeitä, kuten miinojen oikein määrän tarkistaminen ja miinavihjeiden oikea sijoittelu. 
 
