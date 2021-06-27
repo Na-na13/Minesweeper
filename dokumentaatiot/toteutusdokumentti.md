@@ -27,3 +27,5 @@ Pelin toiminnassa ei ole ilmennyt vakavia puutteita eli peli itsessään toimii 
 Muissakin valikoissa on joitakin kosmeettisia vikoja, kuten lopetusvalikossa näkyvä peliin käytetyn ajan sijoittelu ja keskimmäisen painikkeen tekstin sijoittelu (menee painikkeen reunojen yli). Koska valikot oli tarkoitus muuttaa kokonaan toimimaan toisella tavalla, on myös niiden koodi hiukan sekava ja toisteinen eikä sitä ole kommentoitu.
 
 Yksi suuri puute koko projektissa on yksikkötestejen lähes täydellinen puute. En ole vastaavanlaista projektia aikaisemmin toteuttanut, joten testien tekeminen ei oikein luonnistunut, vaikka tietyt testauskohteet olivatkin selkeitä, kuten miinojen oikein määrän tarkistaminen ja miinavihjeiden oikea sijoittelu. 
+
+Toinen suuri puute on, etten ole varma, saako ohjelmaa avattua komentoriviltä käsin, vaikka Käyttöohjeessa olevan komennon pitäisi periaatteessa toimia oikein. Koodista käsittääkseni puuttuu näkyvän näytön alustus, mutta en löytänyt tähän mitään ratkaisua.
