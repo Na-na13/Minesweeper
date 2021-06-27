@@ -1,4 +1,4 @@
-# Miinaharavan ratkaisija
+## Miinaharavan ratkaisija
 
 #### ohjelmointikieli: python
 #### opinto-ohjelma: tietojenkäsittelytieteen kandidaatti
@@ -19,7 +19,7 @@ Miinaharava-peliä on loogista ajatella kaksiulotteisena taulukkona.
 ### Ohjelman syötteet
 Pelin alussa pelaaja valitsee vaikeustason kolmesta vaihtoehdosta. Vaikeustaso määrittelee pelikentän koko sekä miinojen määrä noudattaa Windowsin Miinaharava-pelin vastaavia. Näiden parametrien avulla algoritmi pystyy käsittelemään kaksiuloitteisena taulukkona esitettyä pelikenttää.    
 
-Miinaharava-pelin pelaamisessa pelaaja käsittelee pelikentän ruutuja hiiren klikkauksilla. Hiiren painikkeella 1 avataan avaamaton pelikentän ruutu ja painikkeella 3 merkataan jokin avaamaton ruutu mahdolliseski miinaksi. Ratkaisija vastaavasti simuloi näitä ihmispelaajan tekemiä hiiren liikkeitä.    
+Miinaharava-pelin pelaamisessa pelaaja käsittelee pelikentän ruutuja hiiren klikkauksilla. Hiiren ykköspainikkeella avataan avaamaton pelikentän ruutu ja kakkospainikkeella merkataan jokin avaamaton ruutu mahdolliseski miinaksi. Ratkaisijabotti vastaavasti simuloi näitä ihmispelaajan tekemiä hiiren liikkeitä.    
 
 ### Aika- ja tilavaativuus
 Käsiteltävät syötteet ovat sen verran pieniä, että algoritmin ei käytännössä tarvitse olla kovin tehokas pystyäkseen käsittelemään syötteitä tarpeeksi nopeasti. Kaksiulotteisen taulukon läpikäynnissä tulen käyttämään sisäkkäisiä silmukoita, joten aikavaativuus tulee olemaan jotakuinkin *O(wh)*, missä *w* on pelikentän leveys ja *h* pelikentän korkeus.
