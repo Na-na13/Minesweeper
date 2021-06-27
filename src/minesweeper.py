@@ -1,9 +1,8 @@
 from random import randint
 from time import time
 import pygame
+
 from ui import EndWindow
-
-
 from event import Event
 from clock import Clock
 
@@ -144,7 +143,7 @@ class MSGameLoop:
             if not self.gameover and self.solver is not None:
                 next_move = self.solver.next_move()
             else:
-                #next_move = [Event(pygame.MOUSEBUTTONDOWN, (115,140),1)]
+                #next_move = [Event(pygame.MOUSEBUTTONDOWN, (115,140),1)] # Testauksen rivi
                 next_move = []
             for event in pygame.event.get() + next_move:
                 if event.type == pygame.QUIT:
@@ -171,9 +170,9 @@ class MSGameLoop:
                                         continue
                                 else: # jos ruudussa on miina
                                     pygame.draw.rect(
-                                        self.game.window, RED, 
+                                        self.game.window, RED,
                                         (x * (CELL_SIZE + MARGIN) + MARGIN,
-                                        y * (CELL_SIZE + MARGIN) + MARGIN, 
+                                        y * (CELL_SIZE + MARGIN) + MARGIN,
                                         CELL_SIZE, CELL_SIZE))
                                     font = pygame.font.SysFont("Arial", 40)
                                     mine = font.render("*", True, BLACK)
@@ -196,18 +195,15 @@ class MSGameLoop:
                                     self.minecounter -= 1
                                 else:
                                     pygame.draw.rect(
-                                        self.game.window, WHITE, 
+                                        self.game.window, WHITE,
                                         (x * (CELL_SIZE + MARGIN) + MARGIN,
                                         y * (CELL_SIZE + MARGIN) + MARGIN,
                                         CELL_SIZE, CELL_SIZE))
                                     self.doubted[y][x] = False
                                     self.minecounter += 1
                     else:
-                        #return
+                        #return # Testauksen rivi
                         play_time = f"{self.end_time - self.start_time:.2f}"
-                        #if self.gamewin:
-                        #    ui.WinWindow(w,h,self.game.mines,play_time,self.solver)
-                        #else:
                         EndWindow(w,h,self.game.mines,play_time,self.gamewin,self.solver)
 
             self.show_minecounter(w,h)
@@ -330,7 +326,7 @@ class MSGameLoop:
                     pygame.draw.rect(
                         self.game.window,GREEN,
                         (x * (CELL_SIZE + MARGIN) + MARGIN,
-                        y * (CELL_SIZE + MARGIN) + MARGIN, 
+                        y * (CELL_SIZE + MARGIN) + MARGIN,
                         CELL_SIZE, CELL_SIZE))
 
     def show_minecounter(self,w,h):

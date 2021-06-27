@@ -7,6 +7,14 @@ from event import Event
 class SolverBot:
 
     def __init__(self,w,h,game):
+        """Alustetaan pelin ratkaisijabotti. Botti antaa syötteitä 
+        pelisilmukalle yksi kerrallaan
+
+        Args:
+            w: pelikentän leveys
+            h: pelikentän korkeus
+            game: peli-olio, jonka päällä botti toimii
+        """
         self.game = game
         self.gamegrid = [[20 for a in range(w)] for b in range(h)]
         self.w = w
@@ -17,6 +25,8 @@ class SolverBot:
         self.add_sidecells()
 
     def add_sidecells(self):
+        """Lisätään reunaruudut listaan
+        """
         for x in range(0,self.w):
             if (x,0) not in self.sidecells:
                 self.sidecells.append((x,0))
@@ -30,6 +40,11 @@ class SolverBot:
         self.sidecells.pop(0)
 
     def next_move(self):
+        """Botin seuraava siirto
+
+        Returns:
+            Event: seuraava alkio tapahtumajonosta, simuloi ihmispelaajan siirtoa
+        """
         if self.first_move:
             self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN, (10,10),1))
             self.first_move = False
@@ -45,10 +60,14 @@ class SolverBot:
         return [self.eventqueue.popleft()]
 
     def run_solver(self):
+        """Botti etsii ensin kaikki varmat miinaruudut ja lisää näistä Event-olion
+            tapahtumajonoon. Tämän jälkeen botti etsii kaikki varmat miinattomat
+            ruudut ja lisää myös näistä Event-olion tapahtumajonoon.
+        """
         mines = self.search_mines()
         for mine in mines:
-            x = mine[0]
-            y = mine[1]
+            x = mine[1]
+            y = mine[0]
             if mine in self.sidecells:
                 self.sidecells.remove(mine)
             self.eventqueue.append(Event(pygame.MOUSEBUTTONDOWN,
@@ -71,100 +90,62 @@ class SolverBot:
                     buffercells.append((x,y))
         return buffercells
 
-    def find_neighbourcells(self,cell):
-        neighbourcells = []
-        x = cell[0]
-        y = cell[1]
-        if y-1 >= 0 and x-1 >= 0:
-            if self.gamegrid[y-1][x-1] == 20 or self.gamegrid[y-1][x-1] == 30: # viistoon vasemmalle ylös
-                neighbourcells.append((x-1,y-1))
-        if y-1 >= 0:
-            if self.gamegrid[y-1][x] == 20 or self.gamegrid[y-1][x] == 30: # suoraan ylös
-                neighbourcells.append((x,y-1))
-        if y-1 >= 0 and x+1 < self.w:
-            if self.gamegrid[y-1][x+1] == 20 or self.gamegrid[y-1][x+1] == 30: # viistoon oikealle ylös
-                neighbourcells.append((x+1,y-1))
-        if x-1 >= 0:
-            if self.gamegrid[y][x-1] == 20 or self.gamegrid[y][x-1] == 30: # vasen
-                neighbourcells.append((x-1,y))
-        if x+1 < self.w:
-            if self.gamegrid[y][x+1] == 20 or self.gamegrid[y][x+1] == 30: # oikea
-                neighbourcells.append((x+1,y))
-        if y+1 < self.h and x-1 >= 0:
-            if self.gamegrid[y+1][x-1] == 20 or self.gamegrid[y+1][x-1] == 30: # viistoon vasemmalle alas
-                neighbourcells.append((x-1,y+1))
-        if y+1 < self.h:
-            if self.gamegrid[y+1][x] == 20 or self.gamegrid[y+1][x] == 30: # suoraan alas
-                neighbourcells.append((x,y+1))
-        if y+1 < self.h and x+1 < self.w:
-            if self.gamegrid[y+1][x+1] == 20 or self.gamegrid[y+1][x+1] == 30: # viistoon oikealle alas
-                neighbourcells.append((x+1,y+1))
-        return neighbourcells
-
-    def search_mines(self):# onko hidas?
+    def search_mines(self):
         buffer = self.find_buffercells()
         mine_pos = []
         for cell in buffer: # i = x, j = y
-            neighbours = self.find_neighbourcells(cell)
-            x = cell[0]
-            y = cell[1]
             mine_counter = 0
             pos = []
-            for n in neighbours:
-                if self.gamegrid[n[1]][n[0]] == 30:
+            i = cell[0]
+            j = cell[1]
+            if j-1 >= 0 and i-1 >= 0:
+                if self.gamegrid[j-1][i-1] == 20: # viistoon vasemmalle ylös
+                    pos.append((j-1,i-1))
+                if self.gamegrid[j-1][i-1] == 30:
                     mine_counter += 1
-                if self.gamegrid[n[1]][n[0]] == 20:
-                    pos.append(n)
-            #i = cell[0]
-            #j = cell[1]
-            #if j-1 >= 0 and i-1 >= 0:
-            #    if self.gamegrid[j-1][i-1] == 20: # viistoon vasemmalle ylös
-            #        pos.append((j-1,i-1))
-            #    if self.gamegrid[j-1][i-1] == 30:
-            #        mine_counter += 1
-            #if j-1 >= 0:
-            #    if self.gamegrid[j-1][i] == 20: # suoraan ylös
-            #        pos.append((j-1,i))
-            #    if self.gamegrid[j-1][i] == 30:
-            #        mine_counter += 1
-            #if j-1 >= 0 and i+1 < self.w:
-            #    if self.gamegrid[j-1][i+1] == 20: # viistoon oikealle ylös
-            #        pos.append((j-1,i+1))
-            #    if self.gamegrid[j-1][i+1] == 30:
-            #        mine_counter += 1
-            #if i-1 >= 0:
-            #    if self.gamegrid[j][i-1] == 20: # vasen
-            #        pos.append((j,i-1))
-            #    if self.gamegrid[j][i-1] == 30:
-            #        mine_counter += 1
-            #if i+1 < self.w:
-            #    if self.gamegrid[j][i+1] == 20: # oikea
-            #        pos.append((j,i+1))
-            #    if self.gamegrid[j][i+1] == 30:
-            #        mine_counter += 1
-            #if j+1 < self.h and i-1 >= 0:
-            #    if self.gamegrid[j+1][i-1] == 20: # viistoon vasemmalle alas
-            #        pos.append((j+1,i-1))
-            #    if self.gamegrid[j+1][i-1] == 30:
-            #        mine_counter += 1
-            #if j+1 < self.h:
-            #    if self.gamegrid[j+1][i] == 20: # suoraan alas
-            #        pos.append((j+1,i))
-            #    if self.gamegrid[j+1][i] == 30:
-            #        mine_counter += 1
-            #if j+1 < self.h and i+1 < self.w:
-            #    if self.gamegrid[j+1][i+1] == 20: # viistoon oikealle alas
-            #        pos.append((j+1,i+1))
-            #    if self.gamegrid[j+1][i+1] == 30:
-            #        mine_counter += 1
-            if self.gamegrid[y][x] - mine_counter == 0:
+            if j-1 >= 0:
+                if self.gamegrid[j-1][i] == 20: # suoraan ylös
+                    pos.append((j-1,i))
+                if self.gamegrid[j-1][i] == 30:
+                    mine_counter += 1
+            if j-1 >= 0 and i+1 < self.w:
+                if self.gamegrid[j-1][i+1] == 20: # viistoon oikealle ylös
+                    pos.append((j-1,i+1))
+                if self.gamegrid[j-1][i+1] == 30:
+                    mine_counter += 1
+            if i-1 >= 0:
+                if self.gamegrid[j][i-1] == 20: # vasen
+                    pos.append((j,i-1))
+                if self.gamegrid[j][i-1] == 30:
+                    mine_counter += 1
+            if i+1 < self.w:
+                if self.gamegrid[j][i+1] == 20: # oikea
+                    pos.append((j,i+1))
+                if self.gamegrid[j][i+1] == 30:
+                    mine_counter += 1
+            if j+1 < self.h and i-1 >= 0:
+                if self.gamegrid[j+1][i-1] == 20: # viistoon vasemmalle alas
+                    pos.append((j+1,i-1))
+                if self.gamegrid[j+1][i-1] == 30:
+                    mine_counter += 1
+            if j+1 < self.h:
+                if self.gamegrid[j+1][i] == 20: # suoraan alas
+                    pos.append((j+1,i))
+                if self.gamegrid[j+1][i] == 30:
+                    mine_counter += 1
+            if j+1 < self.h and i+1 < self.w:
+                if self.gamegrid[j+1][i+1] == 20: # viistoon oikealle alas
+                    pos.append((j+1,i+1))
+                if self.gamegrid[j+1][i+1] == 30:
+                    mine_counter += 1
+            if self.gamegrid[j][i] - mine_counter == 0:
                 continue
-            if self.gamegrid[y][x] - mine_counter == len(pos):
+            if self.gamegrid[j][i] - mine_counter == len(pos):
                 for cords in pos:
                     if cords not in mine_pos:
                         mine_pos.append(cords)
         for mine in mine_pos:
-            self.gamegrid[mine[1]][mine[0]] = 30
+            self.gamegrid[mine[0]][mine[1]] = 30
         return mine_pos
 
     def search_frees(self):

@@ -36,10 +36,11 @@ class Tester:
             else:
                 i += 1
                 losecounter += 1
-            print(i)
-        print(f"Voitot: {wincounter}")
-        print(f"Häviöt: {losecounter}")
-        print(f"Voittoprosentti: {(wincounter/self.times)*100} %")
+            print("Games played:", i)
+        print("Result report")
+        print(f"Wins: {wincounter}")
+        print(f"Loses: {losecounter}")
+        print(f"Win%: {(wincounter/self.times)*100} %")
 
 if __name__ == "__main__":
     try:
@@ -61,4 +62,3 @@ if __name__ == "__main__":
             test.start()
     else:
         print("Invalid input")
-   
